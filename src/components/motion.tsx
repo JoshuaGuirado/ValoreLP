@@ -1,4 +1,4 @@
-import { animate, motion, useInView, useMotionValue, useScroll, useTransform, type HTMLMotionProps } from 'framer-motion'
+import { animate, motion, useInView, useMotionValue, useScroll, useSpring, useTransform, type HTMLMotionProps } from 'framer-motion'
 import { useEffect, useRef, type ReactNode } from 'react'
 
 export const ease = [0.25, 0.1, 0.25, 1] as const
@@ -145,6 +145,13 @@ export function MaskText({
   )
 }
 
+/** Fio dourado no topo da tela que acompanha o progresso de leitura da página. */
+export function ScrollProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 })
+  return <motion.div aria-hidden="true" style={{ scaleX }} className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-gold" />
+}
+
 /** Número que conta de 0 até o valor quando aparece na tela. */
 export function CountUp({ to, suffix = '', className = '' }: { to: number; suffix?: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -160,5 +167,69 @@ export function CountUp({ to, suffix = '', className = '' }: { to: number; suffi
     <motion.span ref={ref} className={className}>
       {rounded}
     </motion.span>
+  )
+}
+
+/**
+ * Marcador de capítulo no topo de cada bloco: número em serifa, rótulo e um fio
+ * dourado que se desenha até o símbolo da Valore, deixando clara a troca de seção.
+ */
+export function Chapter({ n, label, dark = false, className = '' }: { n: string; label: string; dark?: boolean; className?: string }) {
+  return (
+    <motion.div
+      initial="hide"
+      whileInView="show"
+      viewport={viewport}
+      className={`flex items-center gap-4 ${className}`}
+    >
+      <motion.span
+        variants={{ hide: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+        transition={{ duration: 0.7, ease }}
+        className={`font-serif text-2xl font-semibold tabular-nums ${dark ? 'text-gold' : 'text-gold-deep'}`}
+      >
+        {n}
+      </motion.span>
+      <motion.span
+        variants={{ hide: { opacity: 0, x: -10 }, show: { opacity: 1, x: 0 } }}
+        transition={{ duration: 0.7, ease, delay: 0.1 }}
+        className={`min-w-0 text-[0.7rem] font-semibold tracking-[0.18em] uppercase sm:tracking-[0.22em] sm:whitespace-nowrap ${dark ? 'text-white/70' : 'text-graphite/70'}`}
+      >
+        {label}
+      </motion.span>
+      <motion.span
+        aria-hidden="true"
+        variants={{ hide: { scaleX: 0 }, show: { scaleX: 1 } }}
+        transition={{ duration: 1.3, ease: [0.65, 0, 0.35, 1], delay: 0.2 }}
+        className={`h-px min-w-6 flex-1 origin-left ${dark ? 'bg-white/25' : 'bg-graphite/20'}`}
+      />
+      <motion.img
+        src="/img/v-dourado.webp"
+        alt=""
+        aria-hidden="true"
+        variants={{ hide: { opacity: 0, rotate: -45, scale: 0.4 }, show: { opacity: 1, rotate: 0, scale: 1 } }}
+        transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 1.1 }}
+        className="h-5 w-auto shrink-0"
+      />
+    </motion.div>
+  )
+}
+
+/**
+ * Divisor entre dois blocos do mesmo tom: dois fios dourados que nascem do centro
+ * e o símbolo da Valore girando até se assentar.
+ */
+export function Divider({ className = '' }: { className?: string }) {
+  return (
+    <motion.div initial="hide" whileInView="show" viewport={viewport} aria-hidden="true" className={`container-lp flex items-center gap-6 ${className}`}>
+      <motion.span variants={{ hide: { scaleX: 0 }, show: { scaleX: 1 } }} transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1] }} className="h-px flex-1 origin-right bg-gold/60" />
+      <motion.img
+        src="/img/v-dourado.webp"
+        alt=""
+        variants={{ hide: { opacity: 0, rotate: 180, scale: 0.3 }, show: { opacity: 1, rotate: 0, scale: 1 } }}
+        transition={{ type: 'spring', stiffness: 120, damping: 12, delay: 0.3 }}
+        className="h-8 w-auto"
+      />
+      <motion.span variants={{ hide: { scaleX: 0 }, show: { scaleX: 1 } }} transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1] }} className="h-px flex-1 origin-left bg-gold/60" />
+    </motion.div>
   )
 }

@@ -1,6 +1,6 @@
 import { animate, motion, useInView, useMotionValue, useTransform } from 'framer-motion'
 import { useEffect, useRef } from 'react'
-import { ease } from './motion'
+import { Chapter, ease } from './motion'
 
 /** Principais cases, conforme o site oficial da Valore. */
 const cases = [
@@ -73,9 +73,7 @@ export function CasesAndClients() {
   return (
     <section className="on-dark bg-graphite-2 py-24 text-white md:py-32">
       <div className="container-lp">
-        <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="kicker">
-          Principais cases tributários
-        </motion.p>
+        <Chapter n="05" label="Principais cases tributários" dark />
         <div className="mt-12 grid gap-px overflow-hidden bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
           {cases.map((c, i) => (
             <motion.div

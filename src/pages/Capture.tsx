@@ -7,7 +7,8 @@ import { Gallery } from '../components/Gallery'
 import { GuideCover } from '../components/GuideCover'
 import { Footer, Header } from '../components/Layout'
 import { LeadForm } from '../components/LeadForm'
-import { CountUp, ease, MaskText, Reveal, RevealImage, Rule } from '../components/motion'
+import { FrameZoom } from '../components/FrameZoom'
+import { Chapter, CountUp, Divider, ease, MaskText, Reveal, RevealImage, Rule, ScrollProgress } from '../components/motion'
 import { Partners } from '../components/Partners'
 import { Timeline } from '../components/Timeline'
 
@@ -199,6 +200,7 @@ function Credentials() {
 export default function CapturePage() {
   return (
     <MotionConfig reducedMotion="user">
+      <ScrollProgress />
       <Header cta={<HeaderCta />} />
 
       <main>
@@ -215,9 +217,7 @@ export default function CapturePage() {
               </div>
             </div>
             <div>
-              <Reveal>
-                <p className="kicker">O guia</p>
-              </Reveal>
+              <Chapter n="01" label="O guia" />
               <MaskText text="Neste material, você vai *descobrir:*" className="heading mt-6 text-4xl text-graphite sm:text-[2.75rem]" goldClass="text-gold-deep" />
               <ol className="mt-10">
                 {discoveries.map((d, i) => (
@@ -247,9 +247,7 @@ export default function CapturePage() {
         {/* O QUE MUDA E QUANDO — foto dos prédios ao fundo */}
         <PhotoSection src="/img/predios.webp" className="py-24 md:py-36" overlay="bg-graphite-2/85" soften>
           <div className="container-lp">
-            <Reveal>
-              <p className="kicker">Cronograma da transição</p>
-            </Reveal>
+            <Chapter n="02" label="Cronograma da transição" dark />
             <MaskText text="O que muda e *quando*" className="heading mt-6 text-4xl sm:text-6xl" />
 
             <div className="mt-12 flex flex-wrap items-center gap-x-5 gap-y-3 text-lg">
@@ -306,9 +304,7 @@ export default function CapturePage() {
               </div>
             </div>
             <div>
-              <Reveal>
-                <p className="kicker">Prazos em curso</p>
-              </Reveal>
+              <Chapter n="03" label="Prazos em curso" />
               <MaskText
                 text="A alíquota de 2027 ainda nem foi fixada, e os *prazos de decisão* já estão correndo."
                 className="heading mt-6 text-3xl text-graphite sm:text-[2.5rem]"
@@ -328,11 +324,10 @@ export default function CapturePage() {
         </section>
 
         {/* SÓCIAS */}
-        <section className="bg-white py-24 md:py-32">
+        <section className="bg-white pt-16 pb-24 md:pt-20 md:pb-32">
+          <Divider className="mb-16 md:mb-20" />
           <div className="container-lp">
-            <Reveal>
-              <p className="kicker">Sócias fundadoras</p>
-            </Reveal>
+            <Chapter n="04" label="Sócias fundadoras" />
             <MaskText text="Quem conduz a *Valore*" className="heading mt-6 mb-16 text-4xl text-graphite sm:text-6xl" goldClass="text-gold-deep" />
             <Partners />
           </div>
@@ -341,15 +336,12 @@ export default function CapturePage() {
         {/* CASES E CLIENTES */}
         <CasesAndClients />
 
-        {/* FAIXA MANIFESTO */}
-        <PhotoSection src="/img/martelo.webp" className="py-28 md:py-40" overlay="bg-graphite-2/75" soften>
-          <div className="container-lp text-center">
-            <MaskText text="Porque mais do que números, geramos *valor* para o seu negócio." className="heading mx-auto max-w-4xl text-3xl sm:text-5xl" />
-          </div>
-        </PhotoSection>
+        {/* FAIXA MANIFESTO — foto em moldura que se expande ao rolar */}
+        <FrameZoom src="/img/martelo.webp" text="Porque mais do que números, geramos *valor* para o seu negócio." />
 
         {/* SOBRE A VALORE */}
-        <section className="py-24 md:py-32">
+        <section className="pt-16 pb-24 md:pt-20 md:pb-32">
+          <Divider className="mb-16 md:mb-20" />
           <div className="container-lp grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
             <div className="relative pb-20 sm:pb-28">
               <RevealImage src="/img/kit-presente.webp" alt="Kit Valore em preto e dourado, com canecas e garrafa" className="aspect-[4/3] w-[86%]" imgClassName="object-cover" parallax={6} />
@@ -358,9 +350,7 @@ export default function CapturePage() {
               </div>
             </div>
             <div>
-              <Reveal>
-                <p className="kicker">Sobre a Valore</p>
-              </Reveal>
+              <Chapter n="06" label="Sobre a Valore" />
               <MaskText text="Extensão estratégica do *departamento fiscal* das empresas" className="heading mt-6 text-3xl text-graphite sm:text-[2.6rem]" goldClass="text-gold-deep" />
               <Reveal delay={0.2}>
                 <p className="mt-6 leading-relaxed text-graphite/75 sm:text-lg">
