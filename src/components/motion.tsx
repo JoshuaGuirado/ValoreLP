@@ -1,4 +1,4 @@
-import { animate, motion, useInView, useMotionValue, useScroll, useTransform, type HTMLMotionProps } from 'framer-motion'
+import { animate, motion, useInView, useMotionValue, useScroll, useSpring, useTransform, type HTMLMotionProps } from 'framer-motion'
 import { useEffect, useRef, type ReactNode } from 'react'
 
 export const ease = [0.25, 0.1, 0.25, 1] as const
@@ -143,6 +143,13 @@ export function MaskText({
       ))}
     </MotionTag>
   )
+}
+
+/** Fio dourado no topo da tela que acompanha o progresso de leitura da página. */
+export function ScrollProgress() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, restDelta: 0.001 })
+  return <motion.div aria-hidden="true" style={{ scaleX }} className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-gold" />
 }
 
 /** Número que conta de 0 até o valor quando aparece na tela. */
