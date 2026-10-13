@@ -80,19 +80,22 @@ function PhotoSection({
   className = '',
   overlay = 'bg-graphite-2/80',
   id,
+  soften = false,
 }: {
   src: string
   children: React.ReactNode
   className?: string
   overlay?: string
   id?: string
+  /** Desfoque leve para fotos de resolução menor em telas grandes. */
+  soften?: boolean
 }) {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const y = useTransform(scrollYProgress, [0, 1], ['-12%', '12%'])
   return (
     <section ref={ref} id={id} className={`on-dark relative isolate overflow-hidden text-white ${className}`}>
-      <motion.img src={src} alt="" aria-hidden="true" style={{ y }} className="absolute inset-x-0 top-[-12%] -z-10 h-[124%] w-full object-cover" />
+      <motion.img src={src} alt="" aria-hidden="true" style={{ y }} className={`absolute inset-x-0 top-[-12%] -z-10 h-[124%] w-full object-cover ${soften ? 'scale-105 blur-[2px]' : ''}`} />
       <div aria-hidden="true" className={`absolute inset-0 -z-10 ${overlay}`} />
       {children}
     </section>
@@ -116,7 +119,7 @@ function Hero() {
           initial={{ scale: 1.25 }}
           animate={{ scale: 1.05 }}
           transition={{ duration: 3, ease: [0.22, 1, 0.36, 1] }}
-          className="h-[120%] w-full object-cover object-[50%_62%]"
+          className="h-[120%] w-full object-cover object-[50%_62%] blur-[1.5px]"
         />
       </motion.div>
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(44_43_41/0.93)_0%,rgb(44_43_41/0.8)_50%,rgb(44_43_41/0.45)_100%)]" />
@@ -241,7 +244,7 @@ export default function CapturePage() {
         <Gallery title="Agregar valor respeitando valores" />
 
         {/* O QUE MUDA E QUANDO — foto dos prédios ao fundo */}
-        <PhotoSection src="/img/predios.webp" className="py-24 md:py-36" overlay="bg-graphite-2/85">
+        <PhotoSection src="/img/predios.webp" className="py-24 md:py-36" overlay="bg-graphite-2/85" soften>
           <div className="container-lp">
             <Reveal>
               <p className="kicker">Cronograma da transição</p>
@@ -335,7 +338,7 @@ export default function CapturePage() {
         </section>
 
         {/* FAIXA MANIFESTO */}
-        <PhotoSection src="/img/martelo.webp" className="py-28 md:py-40" overlay="bg-graphite-2/75">
+        <PhotoSection src="/img/martelo.webp" className="py-28 md:py-40" overlay="bg-graphite-2/75" soften>
           <div className="container-lp text-center">
             <MaskText text="Porque mais do que números, geramos *valor* para o seu negócio." className="heading mx-auto max-w-4xl text-3xl sm:text-5xl" />
           </div>
@@ -374,7 +377,7 @@ export default function CapturePage() {
         </section>
 
         {/* CTA FINAL */}
-        <PhotoSection src="/img/livros.webp" id="cta-final" className="py-28 md:py-36" overlay="bg-graphite-2/80">
+        <PhotoSection src="/img/kit-presente.webp" id="cta-final" className="py-28 md:py-36" overlay="bg-graphite-2/70">
           <motion.img
             src="/img/v-dourado.webp"
             alt=""

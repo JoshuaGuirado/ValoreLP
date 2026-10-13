@@ -6,8 +6,8 @@ import { Logo } from './Logo'
 import { InstagramIcon } from './icons'
 
 /**
- * Cabeçalho. Sobre o hero escuro fica transparente; ao rolar, ganha fundo claro.
- * `overDark=false` deixa o cabeçalho sempre claro (páginas sem hero escuro).
+ * Cabeçalho. Sobre o hero fica transparente; ao rolar, ganha fundo grafite, como o rodapé.
+ * `overDark=false` deixa o fundo grafite sempre visível (páginas sem hero escuro).
  */
 export function Header({ cta, overDark = true }: { cta?: ReactNode; overDark?: boolean }) {
   const { scrollY } = useScroll()
@@ -18,19 +18,17 @@ export function Header({ cta, overDark = true }: { cta?: ReactNode; overDark?: b
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-500 ${
-        solid ? 'bg-paper/95 shadow-[0_1px_0_var(--color-line)] backdrop-blur-md' : 'bg-transparent'
+        solid ? 'bg-graphite-2/95 shadow-[0_1px_0_rgb(255_255_255/0.08)] backdrop-blur-md' : 'bg-transparent'
       }`}
     >
       <div className="container-lp flex h-18 items-center justify-between gap-6 md:h-20">
         <a href="/" aria-label="Valore Soluções Tributárias — início" className="shrink-0">
-          <Logo className="h-10 w-auto md:h-12" subtitleColor={solid ? '#7d7e7a' : '#b4b5b1'} />
+          <Logo className="h-10 w-auto md:h-12" subtitleColor="#b4b5b1" />
         </a>
         <div className="flex items-center gap-8">
           <a
             href={config.empresa.telefoneLink}
-            className={`hidden items-center gap-2 text-sm transition-colors lg:flex ${
-              solid ? 'text-graphite/70 hover:text-graphite' : 'text-white/75 hover:text-white'
-            }`}
+            className="hidden items-center gap-2 text-sm text-white/75 transition-colors hover:text-white lg:flex"
           >
             <Phone className="size-4 text-gold" strokeWidth={1.75} />
             {config.empresa.telefone}
