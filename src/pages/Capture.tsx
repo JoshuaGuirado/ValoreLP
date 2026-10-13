@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, MotionConfig, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { Button, LinkButton } from '../components/Button'
+import { CasesAndClients } from '../components/Clients'
 import { Countdown, DeadlineList } from '../components/Deadlines'
 import { Gallery } from '../components/Gallery'
 import { GuideCover } from '../components/GuideCover'
@@ -336,6 +337,9 @@ export default function CapturePage() {
             <Partners />
           </div>
         </section>
+
+        {/* CASES E CLIENTES */}
+        <CasesAndClients />
 
         {/* FAIXA MANIFESTO */}
         <PhotoSection src="/img/martelo.webp" className="py-28 md:py-40" overlay="bg-graphite-2/75" soften>
