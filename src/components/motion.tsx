@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, type HTMLMotionProps } from 'framer-motion'
-import { useRef, type ReactNode } from 'react'
+import { animate, motion, useInView, useMotionValue, useScroll, useTransform, type HTMLMotionProps } from 'framer-motion'
+import { useEffect, useRef, type ReactNode } from 'react'
 
 export const ease = [0.25, 0.1, 0.25, 1] as const
 const viewport = { once: true, margin: '0px 0px -10% 0px' }
@@ -93,5 +93,72 @@ export function RevealImage({
         className={`block h-full w-full ${imgClassName}`}
       />
     </motion.div>
+  )
+}
+
+/**
+ * Texto revelado palavra por palavra, cada uma subindo de dentro de uma máscara
+ * (efeito editorial de revista). Trechos entre *asteriscos* ficam em dourado.
+ */
+export function MaskText({
+  text,
+  as: Tag = 'h2',
+  className = '',
+  delay = 0,
+  immediate = false,
+  goldClass = 'text-gold',
+}: {
+  text: string
+  as?: 'h1' | 'h2' | 'h3' | 'p'
+  className?: string
+  delay?: number
+  immediate?: boolean
+  goldClass?: string
+}) {
+  const parts = text.split(/(\*[^*]+\*)/).filter(Boolean)
+  const words: { w: string; gold: boolean }[] = []
+  parts.forEach((p) => {
+    const gold = p.startsWith('*')
+    p.replaceAll('*', '')
+      .split(' ')
+      .filter(Boolean)
+      .forEach((w) => words.push({ w, gold }))
+  })
+  const MotionTag = motion[Tag]
+  const anim = immediate ? { animate: 'show' } : { whileInView: 'show', viewport }
+
+  return (
+    <MotionTag className={className} aria-label={text.replaceAll('*', '')} initial="hide" {...anim}>
+      {words.map(({ w, gold }, i) => (
+        <span key={i} aria-hidden="true" className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+          <motion.span
+            className={`inline-block ${gold ? goldClass : ''}`}
+            variants={{ hide: { y: '105%' }, show: { y: '0%' } }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: delay + i * 0.035 }}
+          >
+            {w}
+            {i < words.length - 1 ? ' ' : ''}
+          </motion.span>
+        </span>
+      ))}
+    </MotionTag>
+  )
+}
+
+/** Número que conta de 0 até o valor quando aparece na tela. */
+export function CountUp({ to, suffix = '', className = '' }: { to: number; suffix?: string; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
+  const value = useMotionValue(0)
+  const rounded = useTransform(value, (v) => `${Math.round(v)}${suffix}`)
+  useEffect(() => {
+    if (!inView) return
+    const controls = animate(value, to, { duration: 1.8, ease: [0.22, 1, 0.36, 1] })
+    return () => controls.stop()
+  }, [inView, to, value])
+  return (
+    <motion.span ref={ref} className={className}>
+      {rounded}
+    </motion.span>
   )
 }

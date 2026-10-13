@@ -4,60 +4,10 @@ import { useMemo } from 'react'
 import { LinkButton } from '../components/Button'
 import { WhatsAppIcon } from '../components/icons'
 import { Footer, Header } from '../components/Layout'
-import { ease, Reveal, Rule } from '../components/motion'
+import { ease, MaskText, Reveal, RevealImage, Rule } from '../components/motion'
 import { config } from '../config'
 import { readStoredLead } from '../lib/lead'
 import { whatsappLink } from '../lib/whatsapp'
-
-/** Cenários da Modulação — conteúdo da proposta comercial da Valore. */
-const scenarioCols = ['Cenário base', 'Cenário conservador', 'Cenário favorável']
-const scenarioRows: [string, string[]][] = [
-  ['Alíquota de referência', ['Conforme a estimativa oficial vigente.', 'Superior à estimativa oficial.', 'Enquadramento em regime de alíquota reduzida, quando cabível.']],
-  ['Repasse de preços', ['Repasse parcial ao mercado.', 'Repasse limitado pela concorrência.', 'Repasse integral.']],
-  ['Créditos da cadeia', ['Conforme a composição atual de fornecedores.', 'Créditos reduzidos por fornecedores optantes pelo Simples Nacional.', 'Créditos amplos, com fornecedores no regime regular.']],
-  ['Capital de giro', ['Impacto moderado do split payment.', 'Impacto relevante do split payment.', 'Impacto mínimo, com prazos ajustados.']],
-]
-const colHead = ['bg-gold text-graphite-2', 'bg-steel text-white', 'bg-gold-deep text-white']
-
-function ScenarioTable() {
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[40rem] border-separate border-spacing-1.5 text-left text-sm">
-        <caption className="sr-only">Variáveis consideradas em cada cenário da modulação</caption>
-        <thead>
-          <tr>
-            <td />
-            {scenarioCols.map((c, i) => (
-              <th key={c} scope="col" className={`rounded-[3px] px-4 py-3 text-center text-[0.72rem] font-semibold tracking-[0.08em] uppercase ${colHead[i]}`}>
-                {c}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {scenarioRows.map(([label, cells], r) => (
-            <motion.tr
-              key={label}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease, delay: r * 0.1 }}
-            >
-              <th scope="row" className="w-44 rounded-[3px] bg-paper-2 px-4 py-4 align-middle font-semibold text-graphite">
-                {label}
-              </th>
-              {cells.map((c, i) => (
-                <td key={i} className="rounded-[3px] bg-white px-4 py-4 align-middle leading-snug text-graphite/75">
-                  {c}
-                </td>
-              ))}
-            </motion.tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
 
 export default function ThanksPage() {
   const lead = useMemo(readStoredLead, [])
@@ -111,14 +61,7 @@ export default function ThanksPage() {
                 Tudo certo, {firstName}
               </motion.p>
             )}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease, delay: 0.45 }}
-              className="heading mt-6 text-5xl sm:text-6xl"
-            >
-              O seu guia está liberado.
-            </motion.h1>
+            <MaskText as="h1" immediate delay={0.45} text="O seu guia está *liberado.*" className="heading mt-6 text-5xl sm:text-7xl" />
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -136,20 +79,25 @@ export default function ThanksPage() {
         </section>
 
         {/* PERGUNTA */}
-        <section className="bg-white py-24 md:py-28">
-          <div className="container-lp grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:gap-24">
-            <Reveal>
-              <p className="kicker">Agora, a pergunta mais importante</p>
-              <h2 className="heading mt-6 text-4xl text-graphite sm:text-[2.9rem]">
-                Quanto a reforma representa nos números da sua empresa?
-              </h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="leading-relaxed text-graphite/75 sm:text-lg">
-                O guia mostra o que muda. O efeito sobre a sua carga, a sua margem e o seu caixa depende de dados que só
-                a sua operação tem.
-              </p>
-            </Reveal>
+        <section className="bg-white py-24 md:py-32">
+          <div className="container-lp grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+            <RevealImage src="/img/aperto-de-maos.webp" alt="Aperto de mãos sobre a mesa de reunião" className="aspect-[4/3]" imgClassName="object-cover" parallax={6} />
+            <div>
+              <Reveal>
+                <p className="kicker">Agora, a pergunta mais importante</p>
+              </Reveal>
+              <MaskText
+                text="Quanto a reforma representa nos *números da sua empresa?*"
+                className="heading mt-6 text-4xl text-graphite sm:text-[2.9rem]"
+                goldClass="text-gold-deep"
+              />
+              <Reveal delay={0.2}>
+                <p className="mt-6 leading-relaxed text-graphite/75 sm:text-lg">
+                  O guia mostra o que muda. O efeito sobre a sua carga, a sua margem e o seu caixa depende de dados que
+                  só a sua operação tem.
+                </p>
+              </Reveal>
+            </div>
           </div>
         </section>
 
@@ -160,9 +108,9 @@ export default function ThanksPage() {
               <div>
                 <Reveal>
                   <p className="kicker">Próximo passo</p>
-                  <h2 className="heading mt-6 text-4xl text-graphite sm:text-[2.75rem]">
-                    Modulação de Cenários para a Reforma Tributária
-                  </h2>
+                </Reveal>
+                <MaskText text="Modulação de Cenários para a *Reforma Tributária*" className="heading mt-6 text-4xl text-graphite sm:text-[2.75rem]" goldClass="text-gold-deep" />
+                <Reveal delay={0.2}>
                   <p className="mt-6 leading-relaxed text-graphite/75 sm:text-lg">
                     A Valore projeta, com os números da sua empresa, o resultado de cada ano da transição e compara as
                     alternativas lado a lado.
@@ -198,9 +146,6 @@ export default function ThanksPage() {
               </div>
             </div>
 
-            <Reveal className="mt-20">
-              <ScenarioTable />
-            </Reveal>
           </div>
         </section>
 
@@ -210,7 +155,7 @@ export default function ThanksPage() {
             <div className="pb-20 lg:pb-24">
               <Reveal>
                 <p className="kicker">Bônus{regime === 'Lucro Real' ? ' · a sua empresa se enquadra' : ''}</p>
-                <h2 className="heading mt-6 text-4xl sm:text-[2.75rem]">Bônus para empresas do Lucro Real</h2>
+                <MaskText text="Bônus para empresas do *Lucro Real*" className="heading mt-6 text-4xl sm:text-[2.75rem]" />
                 <p className="mt-6 leading-relaxed text-white/75 sm:text-lg">
                   Atravessar a transição exige caixa. Por isso, a Valore oferece às empresas do Lucro Real um
                   Diagnóstico Preliminar Gratuito de PIS e Cofins, abrangendo as apurações até dezembro de 2026, último
