@@ -6,7 +6,8 @@ import { Gallery } from '../components/Gallery'
 import { GuideCover } from '../components/GuideCover'
 import { Footer, Header } from '../components/Layout'
 import { LeadForm } from '../components/LeadForm'
-import { CountUp, ease, MaskText, Reveal, RevealImage, Rule } from '../components/motion'
+import { FrameZoom } from '../components/FrameZoom'
+import { CountUp, ease, MaskText, Reveal, RevealImage, Rule, ScrollProgress } from '../components/motion'
 import { Partners } from '../components/Partners'
 import { Timeline } from '../components/Timeline'
 
@@ -198,6 +199,7 @@ function Credentials() {
 export default function CapturePage() {
   return (
     <MotionConfig reducedMotion="user">
+      <ScrollProgress />
       <Header cta={<HeaderCta />} />
 
       <main>
@@ -337,12 +339,8 @@ export default function CapturePage() {
           </div>
         </section>
 
-        {/* FAIXA MANIFESTO */}
-        <PhotoSection src="/img/martelo.webp" className="py-28 md:py-40" overlay="bg-graphite-2/75" soften>
-          <div className="container-lp text-center">
-            <MaskText text="Porque mais do que números, geramos *valor* para o seu negócio." className="heading mx-auto max-w-4xl text-3xl sm:text-5xl" />
-          </div>
-        </PhotoSection>
+        {/* FAIXA MANIFESTO — foto em moldura que se expande ao rolar */}
+        <FrameZoom src="/img/martelo.webp" text="Porque mais do que números, geramos *valor* para o seu negócio." />
 
         {/* SOBRE A VALORE */}
         <section className="py-24 md:py-32">
