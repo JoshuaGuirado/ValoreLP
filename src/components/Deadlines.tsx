@@ -57,7 +57,7 @@ export function Countdown({ dark = false }: { dark?: boolean }) {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 14, opacity: 0 }}
                 transition={{ duration: 0.35, ease }}
-                className={`font-serif text-4xl font-semibold tabular-nums sm:text-5xl ${dark ? 'text-white' : 'text-graphite'}`}
+                className={`font-serif text-3xl font-semibold tabular-nums sm:text-5xl ${dark ? 'text-white' : 'text-graphite'}`}
               >
                 {String(p.v).padStart(2, '0')}
               </motion.p>

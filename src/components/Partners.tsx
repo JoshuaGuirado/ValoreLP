@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ease } from './motion'
 
 const partners = [
@@ -20,7 +20,16 @@ const partners = [
 function Card({ p, i }: { p: (typeof partners)[number]; i: number }) {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], [i ? 60 : 0, i ? -60 : 0])
+  const [desktop, setDesktop] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    const on = () => setDesktop(mq.matches)
+    on()
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
+  const shift = desktop && i ? 60 : 0
+  const y = useTransform(scrollYProgress, [0, 1], [shift, -shift])
 
   return (
     <motion.article ref={ref} style={{ y }} className="group">
@@ -41,15 +50,7 @@ function Card({ p, i }: { p: (typeof partners)[number]; i: number }) {
         />
         {/* nome sobre a foto */}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-graphite-2/85 via-graphite-2/30 to-transparent p-7 pt-24 sm:p-9 sm:pt-32">
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, ease, delay: 0.6 + i * 0.15 }}
-            className="heading text-3xl text-white sm:text-4xl"
-          >
-            {p.name}
-          </motion.h3>
+          <h3 className="heading text-3xl text-white sm:text-4xl">{p.name}</h3>
           <motion.div
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}

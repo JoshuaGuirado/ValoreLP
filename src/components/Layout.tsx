@@ -43,7 +43,7 @@ export function Header({ cta, overDark = true }: { cta?: ReactNode; overDark?: b
 export function Footer() {
   const { empresa } = config
   return (
-    <footer className="bg-graphite-2 pt-20 pb-10 text-white/70">
+    <footer className="bg-graphite-2 pt-20 pb-28 text-white/70 md:pb-10">
       <div className="container-lp">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>

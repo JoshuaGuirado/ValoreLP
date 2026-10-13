@@ -52,14 +52,25 @@ export function Gallery({ title }: { title: string }) {
         </div>
       </section>
 
-      {/* celular: arrastar */}
+      {/* celular: rolagem horizontal com encaixe */}
       <section className="overflow-hidden bg-graphite-2 py-16 md:hidden">
         <p className="mb-8 px-5 font-serif text-3xl font-semibold text-white">{title}</p>
-        <motion.div drag="x" dragConstraints={{ left: -(images.length - 1) * 270, right: 0 }} className="flex cursor-grab gap-4 px-5 active:cursor-grabbing">
-          {images.map((im) => (
-            <img key={im.src} src={im.src} alt={im.alt} loading="lazy" draggable={false} className="h-72 w-64 shrink-0 object-cover" />
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {images.map((im, i) => (
+            <motion.img
+              key={im.src}
+              src={im.src}
+              alt={im.alt}
+              loading="lazy"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: Math.min(i, 3) * 0.08 }}
+              className="h-80 w-[78vw] max-w-xs shrink-0 snap-center object-cover"
+            />
           ))}
-        </motion.div>
+        </div>
+        <p className="mt-2 px-5 text-xs text-white/40">Deslize para ver mais →</p>
       </section>
     </>
   )

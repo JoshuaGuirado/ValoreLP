@@ -134,7 +134,7 @@ function Hero() {
       />
 
       <div className="container-lp grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
-        <motion.div style={{ y: textY, opacity: fade }}>
+        <motion.div style={{ y: textY, opacity: fade }} className="max-lg:!transform-none max-lg:!opacity-100">
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.3 }} className="kicker">
             Guia executivo gratuito
           </motion.p>
@@ -300,7 +300,7 @@ export default function CapturePage() {
           <div className="container-lp grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
             <div className="relative">
               <RevealImage src="/img/contrato.webp" alt="Assinatura de contrato com balança da justiça e martelo" className="aspect-[4/5] lg:aspect-[3/4]" imgClassName="object-cover" parallax={8} />
-              <div className="on-dark absolute inset-x-4 bottom-4 bg-graphite-2/90 p-6 backdrop-blur-sm sm:inset-x-6 sm:bottom-6">
+              <div className="on-dark absolute inset-x-3 bottom-3 bg-graphite-2/90 p-4 backdrop-blur-sm sm:inset-x-6 sm:bottom-6 sm:p-6">
                 <Countdown dark />
               </div>
             </div>
@@ -364,11 +364,11 @@ export default function CapturePage() {
                   genéricos.
                 </p>
               </Reveal>
-              <div className="mt-10 grid grid-cols-3 gap-4 border-t border-line pt-8">
+              <div className="mt-10 grid gap-5 border-t border-line pt-8 sm:grid-cols-3 sm:gap-4">
                 {['Excelência técnica', 'Transparência e confiança', 'Soluções personalizadas'].map((t, i) => (
-                  <Reveal key={t} delay={0.2 + i * 0.1}>
+                  <Reveal key={t} delay={0.2 + i * 0.1} className="flex items-center gap-4 sm:block">
                     <img src="/img/v-dourado.webp" alt="" aria-hidden="true" className="h-6 w-auto" />
-                    <p className="mt-3 font-serif text-base leading-snug font-semibold text-graphite sm:text-lg">{t}</p>
+                    <p className="font-serif text-lg leading-snug font-semibold text-graphite sm:mt-3">{t}</p>
                   </Reveal>
                 ))}
               </div>
