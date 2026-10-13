@@ -1,40 +1,22 @@
-import { AnimatePresence, motion, MotionConfig } from 'framer-motion'
-import {
-  ArrowRight,
-  BadgeCheck,
-  Building2,
-  CalendarClock,
-  Clock,
-  FileSignature,
-  ListChecks,
-  Scale,
-  Wallet,
-} from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { HeroBackdrop } from '../components/Backdrop'
+import { AnimatePresence, motion, MotionConfig, useScroll, useTransform } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { Button, LinkButton } from '../components/Button'
 import { Countdown, DeadlineList } from '../components/Deadlines'
-import { EbookMockup } from '../components/EbookMockup'
+import { GuideCover } from '../components/GuideCover'
 import { Footer, Header } from '../components/Layout'
 import { LeadForm } from '../components/LeadForm'
-import { LogoMark } from '../components/Logo'
-import { Marquee } from '../components/Marquee'
-import { ease, Reveal, SplitHeading } from '../components/motion'
+import { ease, Reveal, RevealImage, Rule } from '../components/motion'
 import { Partners } from '../components/Partners'
-import { SpotlightCard } from '../components/SpotlightCard'
 import { Timeline } from '../components/Timeline'
 
 const discoveries = [
-  { icon: Scale, text: 'Por que dois orçamentos de mesmo valor passam a ter custos diferentes para a sua empresa.' },
-  { icon: Building2, text: 'Por que repetir o regime tributário do ano anterior se tornou a decisão mais arriscada do momento.' },
-  { icon: FileSignature, text: 'Qual cláusula precisa constar nos contratos que avançam para 2027.' },
-  { icon: Wallet, text: 'Quanto de capital de giro o split payment retira do seu caixa.' },
-  {
-    icon: CalendarClock,
-    text: 'O que muda no seu segmento: indústria, serviços, comércio, agronegócio, construção, saúde e educação.',
-    chips: ['Indústria', 'Serviços', 'Comércio', 'Agronegócio', 'Construção', 'Saúde', 'Educação'],
-  },
-  { icon: ListChecks, text: 'As oito providências para executar ainda neste trimestre.' },
+  'Por que dois orçamentos de mesmo valor passam a ter custos diferentes para a sua empresa.',
+  'Por que repetir o regime tributário do ano anterior se tornou a decisão mais arriscada do momento.',
+  'Qual cláusula precisa constar nos contratos que avançam para 2027.',
+  'Quanto de capital de giro o split payment retira do seu caixa.',
+  'O que muda no seu segmento: indústria, serviços, comércio, agronegócio, construção, saúde e educação.',
+  'As oito providências para executar ainda neste trimestre.',
 ]
 
 function scrollToForm() {
@@ -47,9 +29,9 @@ function HeaderCta() {
   return (
     <button
       onClick={scrollToForm}
-      className="hidden items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-[0.7rem] font-bold tracking-[0.16em] text-gold-light uppercase transition hover:border-gold hover:bg-gold/10 sm:inline-flex"
+      className="hidden rounded-[3px] bg-gold px-5 py-2.5 text-[0.68rem] font-semibold tracking-[0.16em] text-graphite-2 uppercase transition-colors hover:bg-graphite hover:text-white sm:inline-flex"
     >
-      Receber o guia <ArrowRight className="size-3.5" />
+      Receber o guia
     </button>
   )
 }
@@ -66,7 +48,7 @@ function MobileStickyCta() {
       entries.forEach((e) => seen.set(e.target, e.isIntersecting))
       const formVisible = seen.get(form) ?? true
       const finalVisible = final ? (seen.get(final) ?? false) : false
-      setShow(!formVisible && !finalVisible && window.scrollY > 400)
+      setShow(!formVisible && !finalVisible && window.scrollY > 500)
     })
     io.observe(form)
     if (final) io.observe(final)
@@ -77,18 +59,110 @@ function MobileStickyCta() {
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ y: 100 }}
+          initial={{ y: 90 }}
           animate={{ y: 0 }}
-          exit={{ y: 100 }}
-          transition={{ duration: 0.5, ease }}
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-ink/90 p-3 backdrop-blur-xl md:hidden"
+          exit={{ y: 90 }}
+          transition={{ duration: 0.4, ease }}
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper p-3 md:hidden"
         >
-          <Button onClick={scrollToForm} className="w-full" magnetic={false} icon={<ArrowRight className="size-4" />}>
+          <Button onClick={scrollToForm} className="w-full">
             Quero receber o guia gratuito
           </Button>
         </motion.div>
       )}
     </AnimatePresence>
+  )
+}
+
+function Hero() {
+  const ref = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
+
+  return (
+    <section ref={ref} className="on-dark relative isolate overflow-hidden bg-graphite-2 pt-32 pb-20 text-white md:pt-40 lg:pb-28">
+      <motion.img
+        src="/img/sala-reuniao.webp"
+        alt=""
+        aria-hidden="true"
+        style={{ y }}
+        initial={{ scale: 1.12, opacity: 0 }}
+        animate={{ scale: 1.04, opacity: 1 }}
+        transition={{ duration: 2.2, ease }}
+        className="absolute inset-0 -z-10 h-[120%] w-full object-cover object-[50%_62%]"
+      />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(44_43_41/0.94)_0%,rgb(44_43_41/0.86)_45%,rgb(44_43_41/0.55)_100%)]" />
+      <img
+        src="/img/v-dourado.webp"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-24 -left-24 -z-10 hidden w-[26rem] opacity-[0.12] lg:block"
+      />
+
+      <div className="container-lp grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
+        <div>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.3 }} className="kicker">
+            Guia executivo gratuito
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease, delay: 0.4 }}
+            className="heading mt-7 text-[2.3rem] text-balance sm:text-5xl lg:text-[3.4rem]"
+          >
+            Reforma tributária: as <span className="text-gold">seis decisões</span> que a sua empresa precisa tomar agora
+          </motion.h1>
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.2, ease, delay: 0.8 }}
+            className="mt-9 h-px w-24 origin-left bg-gold"
+          />
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease, delay: 0.9 }}
+            className="mt-9 max-w-xl text-lg leading-relaxed font-medium text-white/90 sm:text-xl"
+          >
+            O planejamento tributário que protege a sua margem hoje foi construído para um sistema que está sendo
+            desmontado.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease, delay: 1.05 }}
+            className="mt-5 max-w-xl leading-relaxed text-white/70 sm:text-lg"
+          >
+            Baixe gratuitamente o guia executivo da Valore e veja, em cerca de 15 minutos, o que avaliar para proteger
+            margem, caixa e créditos durante a transição.
+          </motion.p>
+        </div>
+
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.6 }}>
+          <LeadForm />
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+function Credentials() {
+  const items = [
+    'Mais de 18 anos de atuação em planejamento tributário',
+    'Coordenação do Grupo de Estudos sobre a Reforma Tributária da OAB/Maringá',
+    'Sede em Maringá, Paraná',
+  ]
+  return (
+    <section className="border-b border-line bg-white">
+      <div className="container-lp grid divide-y divide-line md:grid-cols-3 md:divide-x md:divide-y-0">
+        {items.map((t, i) => (
+          <Reveal key={t} delay={i * 0.1} className="flex items-center gap-4 py-6 md:px-8 md:first:pl-0">
+            <img src="/img/v-dourado.webp" alt="" aria-hidden="true" className="h-5 w-auto" />
+            <p className="text-sm leading-snug font-medium text-graphite/80">{t}</p>
+          </Reveal>
+        ))}
+      </div>
+    </section>
   )
 }
 
@@ -98,138 +172,65 @@ export default function CapturePage() {
       <Header cta={<HeaderCta />} />
 
       <main>
-        {/* HERO + FORMULÁRIO */}
-        <section className="grain relative isolate overflow-hidden pt-32 pb-24 md:pt-40 lg:pb-32">
-          <HeroBackdrop />
-          <div className="container-lp relative grid items-start gap-14 lg:grid-cols-[1.12fr_0.88fr] lg:gap-16">
-            <div className="lg:pt-6">
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease, delay: 0.2 }}
-                className="eyebrow"
-              >
-                Guia executivo gratuito
-              </motion.p>
+        <Hero />
+        <Credentials />
 
-              <SplitHeading
-                as="h1"
-                immediate
-                delay={0.3}
-                text="Reforma tributária: as *seis decisões* que a sua empresa precisa tomar agora"
-                className="mt-6 text-[2.35rem] leading-[1.06] font-extrabold tracking-[-0.025em] text-balance text-white sm:text-5xl xl:text-[3.6rem]"
-              />
-
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, ease, delay: 0.95 }}
-                className="mt-7 max-w-xl font-serif text-xl leading-snug text-white/85 italic sm:text-2xl"
-              >
-                O planejamento tributário que protege a sua margem hoje foi construído para um sistema que está sendo
-                desmontado.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, ease, delay: 1.1 }}
-                className="mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg"
-              >
-                Baixe gratuitamente o guia executivo da Valore e veja, em cerca de 15 minutos, o que avaliar para
-                proteger margem, caixa e créditos durante a transição.
-              </motion.p>
-
-              <motion.ul
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 1.3 }}
-                className="mt-10 flex flex-wrap gap-x-8 gap-y-4 text-sm text-white/55"
-              >
-                <li className="flex items-center gap-2.5">
-                  <Clock className="size-4 text-gold" /> Leitura de cerca de 15 minutos
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <BadgeCheck className="size-4 text-gold" /> EC 132/2023 e LC 214/2025
-                </li>
-              </motion.ul>
+        {/* NESTE MATERIAL */}
+        <section className="py-24 md:py-32">
+          <div className="container-lp grid items-start gap-16 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
+            <Reveal className="lg:sticky lg:top-32">
+              <GuideCover />
+            </Reveal>
+            <div>
+              <Reveal>
+                <p className="kicker">O guia</p>
+                <h2 className="heading mt-6 text-4xl text-graphite sm:text-[2.75rem]">Neste material, você vai descobrir:</h2>
+              </Reveal>
+              <ol className="mt-12">
+                {discoveries.map((d, i) => (
+                  <li key={d} className="group">
+                    <Rule className="bg-line" delay={i * 0.05} />
+                    <Reveal delay={0.1 + i * 0.05} className="flex gap-6 py-6 sm:gap-10">
+                      <span className="w-8 shrink-0 font-serif text-xl font-semibold text-gold-deep">{String(i + 1).padStart(2, '0')}</span>
+                      <p className="text-[1.05rem] leading-relaxed text-graphite/85 transition-colors group-hover:text-graphite">{d}</p>
+                    </Reveal>
+                  </li>
+                ))}
+                <Rule className="bg-line" />
+              </ol>
+              <Reveal className="mt-12">
+                <Button onClick={scrollToForm}>Quero receber o guia gratuito</Button>
+              </Reveal>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 40, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1.1, ease, delay: 0.6 }}
-            >
-              <LeadForm />
-            </motion.div>
           </div>
         </section>
 
-        <Marquee />
-
-        {/* NESTE MATERIAL */}
-        <section className="relative overflow-hidden py-24 md:py-32">
-          <div className="container-lp grid items-center gap-16 lg:grid-cols-[0.8fr_1.2fr]">
-            <Reveal className="lg:sticky lg:top-28">
-              <EbookMockup />
-            </Reveal>
-
-            <div>
-              <Reveal>
-                <p className="eyebrow">O que você recebe</p>
+        {/* FAIXA COM FOTO */}
+        <section className="relative">
+          <RevealImage src="/img/martelo.webp" alt="Martelo de juiz e documentos sobre a mesa" className="h-[22rem] md:h-[30rem]" imgClassName="object-cover" parallax={8} />
+          <div className="on-dark absolute inset-0 flex items-center bg-graphite-2/70">
+            <div className="container-lp">
+              <Reveal className="max-w-3xl">
+                <p className="kicker">Manifesto Valore</p>
+                <blockquote className="mt-6 font-serif text-2xl leading-snug text-white sm:text-[2.1rem]">
+                  “Acreditamos que segurança tributária não é um detalhe, mas a base sólida sobre a qual o sucesso de um
+                  negócio se constrói.”
+                </blockquote>
               </Reveal>
-              <SplitHeading
-                text="Neste material, você vai *descobrir:*"
-                className="mt-5 text-4xl leading-tight font-extrabold tracking-tight text-white sm:text-5xl"
-              />
-
-              <ol className="mt-12 grid gap-4 sm:grid-cols-2">
-                {discoveries.map((d, i) => (
-                  <Reveal key={d.text} delay={i * 0.07} className={d.chips ? 'sm:col-span-2' : ''}>
-                    <SpotlightCard className="h-full">
-                      <div className="flex h-full flex-col p-6 sm:p-7">
-                        <div className="flex items-center justify-between">
-                          <span className="grid size-11 place-items-center rounded-xl border border-gold/25 bg-gold/10 text-gold">
-                            <d.icon className="size-5" strokeWidth={1.6} />
-                          </span>
-                          <span className="font-serif text-3xl text-white/15 italic">0{i + 1}</span>
-                        </div>
-                        <p className="mt-6 text-[1.02rem] leading-relaxed font-medium text-white/85">{d.text}</p>
-                        {d.chips && (
-                          <div className="mt-5 flex flex-wrap gap-2" aria-hidden="true">
-                            {d.chips.map((c) => (
-                              <span
-                                key={c}
-                                className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/55 transition group-hover:border-gold/30"
-                              >
-                                {c}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </SpotlightCard>
-                  </Reveal>
-                ))}
-              </ol>
             </div>
           </div>
         </section>
 
         {/* O QUE MUDA E QUANDO */}
-        <section className="relative overflow-hidden bg-ink-2 py-24 md:py-32">
-          <div aria-hidden="true" className="grid-lines absolute inset-0 opacity-50 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
-          <div className="container-lp relative">
-            <div className="mx-auto max-w-3xl text-center">
+        <section className="on-dark bg-graphite py-24 text-white md:py-32">
+          <div className="container-lp">
+            <div className="grid gap-10 lg:grid-cols-2 lg:items-end">
               <Reveal>
-                <p className="eyebrow justify-center">Cronograma da transição</p>
+                <p className="kicker">Cronograma da transição</p>
+                <h2 className="heading mt-6 text-4xl sm:text-[2.75rem]">O que muda e quando</h2>
               </Reveal>
-              <SplitHeading
-                text="O que muda e *quando*"
-                className="mt-5 text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
-              />
               <Reveal delay={0.1}>
-                <p className="mt-6 text-lg leading-relaxed text-white/60">
+                <p className="leading-relaxed text-white/70 sm:text-lg">
                   Cinco tributos sobre o consumo (PIS, Cofins, IPI, ICMS e ISS) serão substituídos por dois: a CBS,
                   federal, e o IBS, de estados e municípios. De 2027 a 2032, a empresa apura o sistema antigo e o novo
                   simultaneamente.
@@ -237,88 +238,62 @@ export default function CapturePage() {
               </Reveal>
             </div>
 
-            <Reveal delay={0.15} className="mx-auto mt-14 flex max-w-3xl flex-wrap items-center justify-center gap-3 sm:gap-4">
-              {['PIS', 'Cofins', 'IPI', 'ICMS', 'ISS'].map((t, i) => (
-                <motion.span
-                  key={t}
-                  initial={{ opacity: 1 }}
-                  whileInView={{ opacity: 0.35 }}
-                  viewport={{ once: true, margin: '0px 0px -20% 0px' }}
-                  transition={{ duration: 0.8, delay: 0.6 + i * 0.1 }}
-                  className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white/80 line-through decoration-gold/70"
-                >
+            <Reveal delay={0.15} className="mt-12 flex flex-wrap items-center gap-x-4 gap-y-3 border-y border-white/15 py-6 text-sm">
+              <span className="mr-2 text-[0.7rem] font-semibold tracking-[0.18em] text-white/50 uppercase">Saem</span>
+              {['PIS', 'Cofins', 'IPI', 'ICMS', 'ISS'].map((t) => (
+                <span key={t} className="text-white/60 line-through decoration-gold/80">
                   {t}
-                </motion.span>
+                </span>
               ))}
-              <ArrowRight className="mx-1 size-5 text-gold" />
-              {['CBS', 'IBS'].map((t, i) => (
-                <motion.span
-                  key={t}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, margin: '0px 0px -20% 0px' }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 1.2 + i * 0.12 }}
-                  className="rounded-full bg-gold px-5 py-2 text-sm font-bold text-ink shadow-[0_0_30px_rgb(197_161_85/0.45)]"
-                >
-                  {t}
-                </motion.span>
-              ))}
+              <ArrowRight className="mx-2 size-4 text-gold" strokeWidth={1.5} />
+              <span className="mr-2 text-[0.7rem] font-semibold tracking-[0.18em] text-white/50 uppercase">Entram</span>
+              <span className="font-semibold text-gold">CBS</span>
+              <span className="font-semibold text-gold">IBS</span>
             </Reveal>
 
-            <div className="mt-20">
+            <div className="mt-16">
               <Timeline />
             </div>
-            <p className="mt-14 text-center text-xs text-white/35">Fontes: EC 132/2023 e LC 214/2025</p>
+            <p className="mt-14 text-xs text-white/45">Fontes: EC 132/2023 e LC 214/2025</p>
           </div>
         </section>
 
         {/* URGÊNCIA */}
-        <section className="relative overflow-hidden py-24 md:py-32">
-          <div aria-hidden="true" className="absolute top-1/2 left-1/2 h-[40rem] w-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/8 blur-[140px]" />
-          <div className="container-lp relative grid items-start gap-14 lg:grid-cols-2 lg:gap-20">
+        <section className="py-24 md:py-32">
+          <div className="container-lp grid items-start gap-16 lg:grid-cols-2 lg:gap-24">
             <div>
               <Reveal>
-                <p className="eyebrow">Prazos em curso</p>
-              </Reveal>
-              <SplitHeading
-                text="A alíquota de 2027 ainda nem foi fixada, e os *prazos de decisão* já estão correndo."
-                className="mt-5 text-3xl leading-[1.15] font-extrabold tracking-tight text-white sm:text-[2.6rem]"
-              />
-              <Reveal delay={0.1}>
-                <p className="mt-6 max-w-lg font-serif text-xl text-white/75 italic">
+                <p className="kicker">Prazos em curso</p>
+                <h2 className="heading mt-6 text-3xl text-graphite sm:text-[2.6rem]">
+                  A alíquota de 2027 ainda nem foi fixada, e os prazos de decisão já estão correndo.
+                </h2>
+                <p className="mt-6 text-lg leading-relaxed text-graphite/75">
                   Não espere a primeira apuração para descobrir o impacto no seu negócio.
                 </p>
               </Reveal>
-              <Reveal delay={0.2} className="mt-12">
+              <Reveal delay={0.15} className="mt-12">
                 <Countdown />
               </Reveal>
-              <Reveal delay={0.3} className="mt-12">
-                <Button onClick={scrollToForm} icon={<ArrowRight className="size-4" />}>
-                  Quero receber o guia gratuito
-                </Button>
+              <Reveal delay={0.2} className="mt-10">
+                <Button onClick={scrollToForm}>Quero receber o guia gratuito</Button>
               </Reveal>
             </div>
-            <Reveal delay={0.15}>
+            <Reveal delay={0.1}>
               <DeadlineList />
             </Reveal>
           </div>
         </section>
 
         {/* SÓCIAS */}
-        <section className="relative overflow-hidden bg-ink-2 py-24 md:py-32">
+        <section className="bg-white py-24 md:py-32">
           <div className="container-lp">
-            <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-end">
-              <div>
-                <Reveal>
-                  <p className="eyebrow">Sócias fundadoras</p>
-                </Reveal>
-                <SplitHeading
-                  text="Agregar valor *respeitando valores*"
-                  className="mt-5 text-4xl leading-tight font-extrabold tracking-tight text-white sm:text-5xl"
-                />
-              </div>
+            <div className="grid gap-8 lg:grid-cols-2 lg:items-end lg:gap-24">
+              <Reveal>
+                <p className="kicker">Sócias fundadoras</p>
+                <h2 className="heading mt-6 text-4xl text-graphite sm:text-[2.75rem]">Agregar valor respeitando valores</h2>
+              </Reveal>
               <Reveal delay={0.1}>
-                <p className="text-lg leading-relaxed text-white/60">
+                <p className="leading-relaxed text-graphite/70 sm:text-lg">
                   Agregar valor respeitando valores: foi esse o desejo dos sócios fundadores ao constituir a Valore
                   Soluções Tributárias — sempre guiados pelos valores que nortearam sua trajetória profissional:
                   transparência, ética e responsabilidade.
@@ -332,90 +307,73 @@ export default function CapturePage() {
         </section>
 
         {/* SOBRE A VALORE */}
-        <section className="relative overflow-hidden py-24 md:py-32">
-          <div className="container-lp grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
-            <Reveal className="relative">
-              <div className="relative overflow-hidden rounded-[2rem] ring-1 ring-white/10">
-                <motion.img
-                  src="/img/brand-kit.webp"
-                  alt="Kit de identidade Valore em preto e dourado"
-                  loading="lazy"
-                  initial={{ scale: 1.15 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.8, ease }}
-                  className="aspect-[4/3] w-full object-cover"
+        <section className="py-24 md:py-32">
+          <div className="container-lp grid items-center gap-16 lg:grid-cols-2 lg:gap-24">
+            <div className="relative pb-16 sm:pb-24">
+              <RevealImage src="/img/kit-presente.webp" alt="Kit Valore em preto e dourado, com canecas e garrafa" className="aspect-[4/3] w-[88%]" imgClassName="object-cover" />
+              <div className="absolute right-0 bottom-0 w-[52%] bg-paper p-1.5">
+                <RevealImage
+                  src="/img/papelaria.webp"
+                  alt="Papelaria Valore: cartões de visita, envelope e papel timbrado"
+                  className="aspect-[4/3]"
+                  imgClassName="object-cover"
+                  delay={0.25}
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-ink/60 via-transparent to-transparent" />
               </div>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.9, ease, delay: 0.4 }}
-                className="absolute -bottom-8 left-6 rounded-2xl border border-white/10 bg-ink/85 px-7 py-5 backdrop-blur-xl sm:left-10"
-              >
-                <p className="text-5xl font-extrabold text-gold-gradient">18+</p>
-                <p className="mt-1 text-xs font-semibold tracking-[0.16em] text-white/60 uppercase">anos de atuação</p>
-              </motion.div>
-            </Reveal>
-
-            <div className="pt-8 lg:pt-0">
+            </div>
+            <div>
               <Reveal>
-                <p className="eyebrow">Sobre a Valore</p>
-              </Reveal>
-              <SplitHeading
-                text="Extensão estratégica do *departamento fiscal* das empresas"
-                className="mt-5 text-3xl leading-tight font-extrabold tracking-tight text-white sm:text-[2.6rem]"
-              />
-              <Reveal delay={0.1}>
-                <p className="mt-6 text-lg leading-relaxed text-white/60">
-                  A Valore Soluções Tributárias é uma consultoria sediada em Maringá, Paraná. Nossos profissionais contam
-                  com mais de 18 anos de atuação em planejamento tributário, recuperação de créditos e assessoria
-                  tributária. Cada projeto parte dos números da própria empresa, sem pacotes genéricos.
+                <p className="kicker">Sobre a Valore</p>
+                <h2 className="heading mt-6 text-3xl text-graphite sm:text-[2.6rem]">
+                  Extensão estratégica do departamento fiscal das empresas
+                </h2>
+                <p className="mt-6 leading-relaxed text-graphite/75 sm:text-lg">
+                  A Valore Soluções Tributárias é uma consultoria sediada em Maringá, Paraná. Nossos profissionais
+                  contam com mais de 18 anos de atuação em planejamento tributário, recuperação de créditos e
+                  assessoria tributária.
+                </p>
+                <p className="mt-4 leading-relaxed text-graphite/75 sm:text-lg">
+                  Atuamos como extensão estratégica do departamento fiscal das empresas. Cada projeto parte dos números
+                  da própria empresa, sem pacotes genéricos.
                 </p>
               </Reveal>
-              <div className="mt-10 grid gap-4 sm:grid-cols-3">
-                {['Excelência técnica', 'Transparência e confiança', 'Soluções personalizadas'].map((t, i) => (
-                  <Reveal key={t} delay={0.15 + i * 0.08}>
-                    <div className="h-full rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition duration-500 hover:-translate-y-1 hover:border-gold/40">
-                      <LogoMark className="h-6 w-auto" />
-                      <p className="mt-4 text-sm font-semibold text-white/85">{t}</p>
-                    </div>
+              <dl className="mt-10 grid gap-6 border-t border-line pt-8 sm:grid-cols-3">
+                {[
+                  ['Excelência técnica', 'Especialistas em tributação, contabilidade, planejamento financeiro e jurídico.'],
+                  ['Transparência e confiança', 'Clareza em cada etapa do trabalho.'],
+                  ['Soluções personalizadas', 'Cada estratégia é desenhada sob medida.'],
+                ].map(([t, d], i) => (
+                  <Reveal key={t} delay={0.1 + i * 0.08}>
+                    <dt className="font-serif text-lg font-semibold text-graphite">{t}</dt>
+                    <dd className="mt-2 text-sm leading-relaxed text-graphite/65">{d}</dd>
                   </Reveal>
                 ))}
-              </div>
+              </dl>
             </div>
           </div>
         </section>
 
         {/* CTA FINAL */}
-        <section id="cta-final" className="grain relative overflow-hidden py-24 md:py-32">
-          <div className="container-lp">
+        <section id="cta-final" className="on-dark relative isolate overflow-hidden bg-graphite-2 py-24 text-white md:py-32">
+          <img src="/img/livros.webp" alt="" aria-hidden="true" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" />
+          <img src="/img/v-dourado.webp" alt="" aria-hidden="true" className="pointer-events-none absolute -right-20 -bottom-20 -z-10 w-80 opacity-20" />
+          <div className="container-lp text-center">
             <Reveal>
-              <div className="relative overflow-hidden rounded-[2.5rem] border border-gold/25 bg-[radial-gradient(ellipse_at_top,rgb(197_161_85/0.22),transparent_60%),linear-gradient(180deg,#22211f,#151413)] px-6 py-16 text-center sm:px-12 md:py-24">
-                <LogoMark stroke className="pointer-events-none absolute -top-20 -left-16 w-72 opacity-20" />
-                <LogoMark stroke className="pointer-events-none absolute -right-20 -bottom-24 w-96 opacity-15" />
-                <p className="eyebrow justify-center">Guia executivo gratuito</p>
-                <SplitHeading
-                  text="Reforma tributária: as seis decisões que a sua empresa precisa tomar *agora*"
-                  className="mx-auto mt-6 max-w-3xl text-3xl leading-tight font-extrabold tracking-tight text-white sm:text-5xl"
-                />
-                <p className="mx-auto mt-6 max-w-xl text-white/60">
-                  Não espere a primeira apuração para descobrir o impacto no seu negócio.
-                </p>
-                <div className="mt-10 flex justify-center">
-                  <LinkButton
-                    href="#formulario"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      scrollToForm()
-                    }}
-                    icon={<ArrowRight className="size-4" />}
-                  >
-                    Quero receber o guia gratuito
-                  </LinkButton>
-                </div>
+              <p className="kicker justify-center">Guia executivo gratuito</p>
+              <h2 className="heading mx-auto mt-6 max-w-3xl text-3xl sm:text-5xl">
+                Reforma tributária: as seis decisões que a sua empresa precisa tomar agora
+              </h2>
+              <p className="mx-auto mt-6 max-w-xl text-white/70">Não espere a primeira apuração para descobrir o impacto no seu negócio.</p>
+              <div className="mt-10">
+                <LinkButton
+                  href="#formulario"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    scrollToForm()
+                  }}
+                >
+                  Quero receber o guia gratuito
+                </LinkButton>
               </div>
             </Reveal>
           </div>

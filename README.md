@@ -52,4 +52,4 @@ integrations/google-apps-script/                  script da planilha de leads
 
 ## Identidade visual
 
-Paleta do manual de marca: dourado `#C5A155`, dourado escuro `#8E7743`, grafite `#3A3937`, cinza `#6A696D` e cinza claro `#CACACA`. Tipografia: Montserrat, com Noto Serif Display itálica nos destaques. O logotipo foi vetorizado a partir do arquivo original da marca (`public/logo-valore.svg`).
+Paleta do manual de marca: dourado `#C5A155`, dourado escuro `#8E7743`, grafite `#3A3937`, cinza `#6A696D` e cinza claro `#CACACA`. Tipografia: Noto Serif nos títulos (alternativa gratuita à Argent CF das propostas) e Montserrat no texto (alternativa à Gotham). Fotos: sala de reunião da capa das propostas, fotos das sócias e imagens do manual de marca. O logotipo foi vetorizado a partir do arquivo original da marca (`public/logo-valore.svg`).

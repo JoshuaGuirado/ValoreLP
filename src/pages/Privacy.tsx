@@ -9,12 +9,12 @@ const UPDATED = '13 de outubro de 2026'
 function Section({ n, title, children }: { n: number; title: string; children: ReactNode }) {
   return (
     <Reveal>
-      <section id={`s${n}`} className="scroll-mt-28 border-t border-white/8 py-10">
-        <h2 className="flex items-baseline gap-4 text-xl font-bold text-white sm:text-2xl">
-          <span className="font-serif text-2xl text-gold italic">{String(n).padStart(2, '0')}</span>
+      <section id={`s${n}`} className="scroll-mt-28 border-t border-line py-10">
+        <h2 className="heading flex items-baseline gap-4 text-xl text-graphite sm:text-2xl">
+          <span className="font-serif text-lg text-gold-deep">{String(n).padStart(2, '0')}</span>
           {title}
         </h2>
-        <div className="mt-5 space-y-4 text-[0.98rem] leading-relaxed text-white/65 [&_li]:pl-1 [&_strong]:text-white/90 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5 [&_ul]:marker:text-gold">
+        <div className="mt-5 space-y-4 text-[0.98rem] leading-relaxed text-graphite/75 [&_li]:pl-1 [&_strong]:text-graphite [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5 [&_ul]:marker:text-gold-deep">
           {children}
         </div>
       </section>
@@ -26,11 +26,11 @@ export default function PrivacyPage() {
   const { empresa } = config
   const canal = (
     <>
-      pelo telefone <a className="text-gold-light underline underline-offset-2" href={empresa.telefoneLink}>{empresa.telefone}</a>
+      pelo telefone <a className="text-gold-ink underline underline-offset-2" href={empresa.telefoneLink}>{empresa.telefone}</a>
       {empresa.emailPrivacidade && (
         <>
           {' '}ou pelo e-mail{' '}
-          <a className="text-gold-light underline underline-offset-2" href={`mailto:${empresa.emailPrivacidade}`}>
+          <a className="text-gold-ink underline underline-offset-2" href={`mailto:${empresa.emailPrivacidade}`}>
             {empresa.emailPrivacidade}
           </a>
         </>
@@ -40,15 +40,14 @@ export default function PrivacyPage() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <Header />
+      <Header overDark={false} />
       <main className="relative pt-36 pb-24 md:pt-44">
-        <div aria-hidden="true" className="grid-lines absolute inset-x-0 top-0 h-[28rem] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
         <article className="container-lp relative max-w-3xl">
           <Reveal>
-            <p className="eyebrow">LGPD · Lei nº 13.709/2018</p>
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Política de Privacidade</h1>
-            <p className="mt-4 text-sm text-white/45">Última atualização: {UPDATED}</p>
-            <p className="mt-8 text-lg leading-relaxed text-white/70">
+            <p className="kicker">LGPD · Lei nº 13.709/2018</p>
+            <h1 className="heading mt-6 text-4xl text-graphite sm:text-5xl">Política de Privacidade</h1>
+            <p className="mt-4 text-sm text-graphite/55">Última atualização: {UPDATED}</p>
+            <p className="mt-8 text-lg leading-relaxed text-graphite/80">
               A {empresa.razaoSocial.replace(/\.$/, '')} ("Valore") respeita a sua privacidade. Esta política explica,
               de forma clara, quais dados pessoais coletamos neste site, para que os utilizamos, com quem podem ser
               compartilhados e como você pode exercer os seus direitos previstos na Lei Geral de Proteção de Dados
@@ -171,8 +170,8 @@ export default function PrivacyPage() {
             </Section>
           </div>
 
-          <div className="mt-6 border-t border-white/8 pt-10">
-            <a href="/" className="text-sm font-semibold tracking-[0.14em] text-gold-light uppercase hover:text-white">
+          <div className="mt-6 border-t border-line pt-10">
+            <a href="/" className="text-sm font-semibold tracking-[0.14em] text-gold-ink uppercase hover:text-graphite">
               ← Voltar para a página inicial
             </a>
           </div>
