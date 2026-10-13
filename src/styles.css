@@ -24,8 +24,8 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-    overflow-x: hidden;
   }
+  /* clip (e não hidden) para não quebrar o position: sticky da galeria */
   html,
   body {
     overflow-x: clip;
@@ -36,7 +36,6 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
   }
   ::selection {
     background: var(--color-gold);

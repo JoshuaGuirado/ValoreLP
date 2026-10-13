@@ -1,5 +1,5 @@
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 const images = [
   { src: '/img/kit-presente.webp', alt: 'Kit Valore em preto e dourado' },
@@ -17,15 +17,27 @@ const images = [
  */
 export function Gallery({ title }: { title: string }) {
   const ref = useRef<HTMLElement>(null)
+  const rowRef = useRef<HTMLDivElement>(null)
+  // distância exata para a última foto parar encostada na borda direita
+  const [travel, setTravel] = useState(0)
+  useLayoutEffect(() => {
+    const measure = () => {
+      const row = rowRef.current
+      if (row) setTravel(Math.max(0, row.scrollWidth - window.innerWidth))
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  const smooth = useSpring(scrollYProgress, { stiffness: 70, damping: 22 })
-  const x = useTransform(smooth, [0, 1], ['2%', '-62%'])
-  const titleX = useTransform(smooth, [0, 1], ['0%', '-25%'])
+  const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 24 })
+  const x = useTransform(smooth, [0, 1], [0, -travel])
+  const titleX = useTransform(smooth, [0, 1], ['0%', '-20%'])
 
   return (
     <>
       {/* desktop: rolagem horizontal presa */}
-      <section ref={ref} className="relative hidden h-[300vh] bg-graphite-2 md:block">
+      <section ref={ref} className="relative hidden h-[240vh] bg-graphite-2 md:block">
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
           <motion.p
             style={{ x: titleX }}
@@ -34,19 +46,15 @@ export function Gallery({ title }: { title: string }) {
           >
             {title} · {title}
           </motion.p>
-          <motion.div style={{ x }} className="flex gap-8 pl-[6vw]">
+          <motion.div ref={rowRef} style={{ x }} className="flex w-max gap-8 px-[6vw]">
             {images.map((im, i) => (
-              <motion.figure
+              <figure
                 key={im.src}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 }}
                 className={`group relative shrink-0 overflow-hidden ${i % 2 ? 'mt-24 h-[46vh] w-[34vw]' : 'h-[56vh] w-[30vw]'}`}
               >
                 <img src={im.src} alt={im.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.06]" />
                 <div className="absolute inset-0 bg-graphite-2/10 transition-colors duration-700 group-hover:bg-transparent" />
-              </motion.figure>
+              </figure>
             ))}
           </motion.div>
         </div>
