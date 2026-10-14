@@ -151,7 +151,7 @@ export default function ThanksPage() {
 
         {/* BÔNUS LUCRO REAL */}
         <section className="on-dark relative isolate overflow-hidden bg-graphite text-white">
-          <div className="container-lp grid items-end gap-12 pt-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pt-24">
+          <div className="container-lp grid items-center gap-12 pt-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pt-24">
             <div className="pb-20 lg:pb-24">
               <Reveal>
                 <p className="kicker">Bônus{regime === 'Lucro Real' ? ' · a sua empresa se enquadra' : ''}</p>
@@ -173,29 +173,24 @@ export default function ThanksPage() {
               </Reveal>
             </div>
 
-            {/* sócias recortadas, como na página de apresentação das propostas */}
-            <div className="relative mx-auto flex w-full max-w-md items-end justify-center self-end">
-              <img src="/img/v-dourado.webp" alt="" aria-hidden="true" className="absolute top-0 left-1/2 w-[85%] -translate-x-1/2 opacity-25" />
-              <motion.img
-                src="/img/katrin-recorte.webp"
-                alt="Katrin Arrais"
-                loading="lazy"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, ease }}
-                className="relative z-0 -mr-10 w-1/2"
-              />
-              <motion.img
-                src="/img/virginia-recorte.webp"
-                alt="Virgínia D. Flora"
-                loading="lazy"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, ease, delay: 0.15 }}
-                className="relative z-10 w-1/2"
-              />
+            {/* fotos das sócias, conforme o site oficial */}
+            <div className="relative mx-auto grid w-full max-w-md grid-cols-2 gap-4 self-center pb-20 lg:pb-24">
+              {[
+                { src: '/img/katrin-700.webp', alt: 'Katrin Arrais', name: 'Katrin Arrais', y: 'mt-10' },
+                { src: '/img/virginia-720.webp', alt: 'Virgínia Dalla Flora', name: 'Virgínia Dalla Flora', y: '' },
+              ].map((p, i) => (
+                <motion.figure
+                  key={p.src}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1, ease, delay: i * 0.15 }}
+                  className={p.y}
+                >
+                  <img src={p.src} alt={p.alt} loading="lazy" className="aspect-[7/10] w-full object-cover ring-1 ring-white/10" />
+                  <figcaption className="mt-3 text-[0.65rem] font-semibold tracking-[0.16em] text-white/60 uppercase">{p.name}</figcaption>
+                </motion.figure>
+              ))}
             </div>
           </div>
         </section>
