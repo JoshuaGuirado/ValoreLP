@@ -7,7 +7,7 @@ import { Gallery } from '../components/Gallery'
 import { GuideCover } from '../components/GuideCover'
 import { Footer, Header } from '../components/Layout'
 import { LeadForm } from '../components/LeadForm'
-import { FrameZoom } from '../components/FrameZoom'
+import { Manifesto } from '../components/Manifesto'
 import { Chapter, CountUp, Divider, ease, MaskText, Reveal, RevealImage, Rule, ScrollProgress } from '../components/motion'
 import { Partners } from '../components/Partners'
 import { Timeline } from '../components/Timeline'
@@ -336,8 +336,8 @@ export default function CapturePage() {
         {/* CASES E CLIENTES */}
         <CasesAndClients />
 
-        {/* FAIXA MANIFESTO — foto em moldura que se expande ao rolar */}
-        <FrameZoom src="/img/martelo.webp" text="Porque mais do que números, geramos *valor* para o seu negócio." />
+        {/* FAIXA MANIFESTO — frase que acende ao rolar */}
+        <Manifesto src="/img/martelo.webp" text="Porque mais do que números, geramos *valor* para o seu negócio." />
 
         {/* SOBRE A VALORE */}
         <section className="pt-16 pb-24 md:pt-20 md:pb-32">
