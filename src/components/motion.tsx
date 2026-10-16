@@ -1,5 +1,5 @@
 import { animate, motion, useInView, useMotionValue, useScroll, useSpring, useTransform, type HTMLMotionProps } from 'framer-motion'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 export const ease = [0.25, 0.1, 0.25, 1] as const
 const viewport = { once: true, margin: '0px 0px -10% 0px' }
@@ -231,5 +231,73 @@ export function Divider({ className = '' }: { className?: string }) {
       />
       <motion.span variants={{ hide: { scaleX: 0 }, show: { scaleX: 1 } }} transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1] }} className="h-px flex-1 origin-left bg-gold/60" />
     </motion.div>
+  )
+}
+
+/**
+ * Número de capítulo gigante, vazado em dourado, que sobe mais rápido que a
+ * rolagem (parallax) e entra desfocado. Fica atrás do conteúdo da seção.
+ */
+export function SectionNumber({ n, dark = false, className = '' }: { n: string; dark?: boolean; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], [180, -260])
+  return (
+    <div ref={ref} aria-hidden="true" className={`pointer-events-none absolute -top-6 right-0 select-none md:right-6 ${className}`}>
+      <motion.span
+        style={{ y, WebkitTextStroke: `1px ${dark ? 'rgb(197 161 85 / 0.35)' : 'rgb(142 119 67 / 0.28)'}` }}
+        initial={{ opacity: 0, scale: 1.3, filter: 'blur(12px)' }}
+        whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+        viewport={{ once: true, margin: '0px 0px -20% 0px' }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        className="block font-serif text-[9rem] leading-none font-semibold text-transparent md:text-[15rem] lg:text-[19rem]"
+      >
+        {n}
+      </motion.span>
+    </div>
+  )
+}
+
+/**
+ * Transição entre telas: o bloco de baixo sobe por cima do de cima. O de cima
+ * fica preso, recua e escurece enquanto é coberto; o de baixo chega com cantos
+ * arredondados que se endireitam.
+ */
+export function CoverTransition({ under, over }: { under: ReactNode; over: ReactNode }) {
+  const underRef = useRef<HTMLDivElement>(null)
+  const [top, setTop] = useState(0)
+  useEffect(() => {
+    const el = underRef.current
+    if (!el) return
+    const measure = () => setTop(Math.min(0, window.innerHeight - el.offsetHeight))
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    window.addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
+  const { scrollYProgress } = useScroll({ target: underRef, offset: ['end end', 'end start'] })
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9])
+  const dim = useTransform(scrollYProgress, [0, 1], [0, 0.65])
+  const radius = useTransform(scrollYProgress, [0, 0.6], [36, 0])
+
+  return (
+    <div className="relative">
+      <div ref={underRef} className="sticky z-0" style={{ top }}>
+        <motion.div style={{ scale }} className="origin-bottom">
+          {under}
+        </motion.div>
+        <motion.div aria-hidden="true" style={{ opacity: dim }} className="pointer-events-none absolute inset-0 bg-black" />
+      </div>
+      <motion.div
+        style={{ borderTopLeftRadius: radius, borderTopRightRadius: radius }}
+        className="relative z-10 overflow-hidden shadow-[0_-30px_60px_-20px_rgb(0_0_0/0.45)]"
+      >
+        {over}
+      </motion.div>
+    </div>
   )
 }

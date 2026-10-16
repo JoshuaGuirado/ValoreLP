@@ -8,7 +8,7 @@ import { GuideCover } from '../components/GuideCover'
 import { Footer, Header } from '../components/Layout'
 import { LeadForm } from '../components/LeadForm'
 import { Manifesto } from '../components/Manifesto'
-import { Chapter, CountUp, Divider, ease, MaskText, Reveal, RevealImage, Rule, ScrollProgress } from '../components/motion'
+import { Chapter, CountUp, CoverTransition, Divider, ease, MaskText, Reveal, RevealImage, Rule, ScrollProgress, SectionNumber } from '../components/motion'
 import { Partners } from '../components/Partners'
 import { Timeline } from '../components/Timeline'
 
@@ -245,7 +245,8 @@ export default function CapturePage() {
 
         {/* NESTE MATERIAL — capa do guia sobre foto */}
         <section className="relative overflow-hidden py-24 md:py-32">
-          <div className="container-lp grid items-center gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
+          <SectionNumber n="01" />
+          <div className="relative container-lp grid items-center gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
             <div className="relative">
               <RevealImage src="/img/xicaras.webp" alt="Xícaras e cartão de visita da Valore" className="aspect-[4/5] w-[85%]" imgClassName="object-cover" parallax={6} />
               <div className="absolute top-1/2 right-0 w-[55%] -translate-y-1/2">
@@ -280,9 +281,12 @@ export default function CapturePage() {
         {/* GALERIA HORIZONTAL */}
         <Gallery title="Agregar valor respeitando valores" />
 
-        {/* O QUE MUDA E QUANDO — foto dos prédios ao fundo */}
+        {/* O QUE MUDA E QUANDO → PRAZOS: o bloco 03 sobe por cima do 02 */}
+        <CoverTransition
+          under={
         <PhotoSection src="/img/predios.webp" className="py-24 md:py-36" overlay="bg-graphite-2/85" soften>
-          <div className="container-lp">
+          <SectionNumber n="02" dark />
+          <div className="relative container-lp">
             <Chapter n="02" label="Cronograma da transição" dark />
             <MaskText text="O que muda e *quando*" className="heading mt-6 text-4xl sm:text-6xl" />
 
@@ -329,10 +333,11 @@ export default function CapturePage() {
             <p className="mt-14 text-xs text-white/45">Fontes: EC 132/2023 e LC 214/2025</p>
           </div>
         </PhotoSection>
-
-        {/* URGÊNCIA — foto do contrato ao fundo */}
-        <section className="py-24 md:py-32">
-          <div className="container-lp grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+          }
+          over={
+        <section className="relative overflow-hidden bg-paper py-24 md:py-32">
+          <SectionNumber n="03" />
+          <div className="relative container-lp grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
             <div className="relative">
               <RevealImage src="/img/contrato.webp" alt="Assinatura de contrato com balança da justiça e martelo" className="aspect-[4/5] lg:aspect-[3/4]" imgClassName="object-cover" parallax={8} />
               <div className="on-dark absolute inset-x-3 bottom-3 bg-graphite-2/90 p-4 backdrop-blur-sm sm:inset-x-6 sm:bottom-6 sm:p-6">
@@ -358,27 +363,33 @@ export default function CapturePage() {
             </div>
           </div>
         </section>
+          }
+        />
 
-        {/* SÓCIAS */}
-        <section className="bg-white pt-16 pb-24 md:pt-20 md:pb-32">
-          <Divider className="mb-16 md:mb-20" />
-          <div className="container-lp">
-            <Chapter n="04" label="Sócias fundadoras" />
-            <MaskText text="Quem conduz a *Valore*" className="heading mt-6 mb-16 text-4xl text-graphite sm:text-6xl" goldClass="text-gold-deep" />
-            <Partners />
-          </div>
-        </section>
-
-        {/* CASES E CLIENTES */}
-        <CasesAndClients />
+        {/* SÓCIAS → CASES: o bloco 05 sobe por cima do 04 */}
+        <CoverTransition
+          under={
+            <section className="relative overflow-hidden bg-white pt-16 pb-28 md:pt-20 md:pb-40">
+              <SectionNumber n="04" />
+              <Divider className="relative mb-16 md:mb-20" />
+              <div className="relative container-lp">
+                <Chapter n="04" label="Sócias fundadoras" />
+                <MaskText text="Quem conduz a *Valore*" className="heading mt-6 mb-20 text-4xl text-graphite sm:text-6xl" goldClass="text-gold-deep" />
+                <Partners />
+              </div>
+            </section>
+          }
+          over={<CasesAndClients />}
+        />
 
         {/* FAIXA MANIFESTO — frase que acende ao rolar */}
         <Manifesto src="/img/martelo.webp" text="Porque mais do que números, geramos *valor* para o seu negócio." />
 
         {/* SOBRE A VALORE */}
-        <section className="pt-16 pb-24 md:pt-20 md:pb-32">
-          <Divider className="mb-16 md:mb-20" />
-          <div className="container-lp grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+        <section className="relative overflow-hidden pt-16 pb-24 md:pt-20 md:pb-32">
+          <SectionNumber n="06" />
+          <Divider className="relative mb-16 md:mb-20" />
+          <div className="relative container-lp grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
             <div className="relative pb-20 sm:pb-28">
               <RevealImage src="/img/kit-presente.webp" alt="Kit Valore em preto e dourado, com canecas e garrafa" className="aspect-[4/3] w-[86%]" imgClassName="object-cover" parallax={6} />
               <div className="absolute right-0 bottom-0 w-[50%] bg-paper p-1.5">

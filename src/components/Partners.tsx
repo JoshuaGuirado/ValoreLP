@@ -1,98 +1,149 @@
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
+import { useRef, type PointerEvent } from 'react'
 import { ease } from './motion'
 
 /** Fotos e textos conforme o site oficial da Valore (valoretribut.com). */
 const partners = [
   {
     name: 'Virgínia Dalla Flora',
-    src: '/img/virginia-720.webp',
+    src: '/img/virginia-1080.webp',
+    srcSet: '/img/virginia-720.webp 720w, /img/virginia-1080.webp 1080w',
     alt: 'Virgínia Dalla Flora, sócia fundadora da Valore, de blazer marrom e braços cruzados',
     role: 'Jurídico',
+    stat: { value: '17+', label: 'anos de advocacia e consultoria tributária' },
     bio: [
-      'Especialista em Direito Tributário pelo IBET, com mais de 17 anos de experiência',
+      'Advogada, pós-graduada pela Escola da Magistratura do Paraná e especialista em Direito Tributário pelo IBET',
       'Responsável pelo jurídico consultivo e contencioso administrativo e judicial',
     ],
   },
   {
     name: 'Katrin Arrais',
     src: '/img/katrin-700.webp',
+    srcSet: undefined,
     alt: 'Katrin Arrais, sócia fundadora da Valore, de blazer bege',
     role: 'Comercial e financeiro',
+    stat: { value: '6', label: 'anos de atuação no setor financeiro' },
     bio: ['Advogada e administradora de empresas, pós-graduada em Direito Tributário e Direito Público', 'Responsável pela área comercial e financeira'],
   },
 ]
 
-const card = {
-  hide: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.35 } },
+const spring = { stiffness: 150, damping: 18, mass: 0.6 }
+
+/** Foto grande com moldura deslocada, parallax interno e inclinação leve ao mouse. */
+function Portrait({ p, i }: { p: (typeof partners)[number]; i: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
+  const imgY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
+  const frameY = useTransform(scrollYProgress, [0, 1], [40, -40])
+
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-6, 6]), spring)
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [5, -5]), spring)
+  const onMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse') return
+    const r = e.currentTarget.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+  const reset = () => {
+    mx.set(0)
+    my.set(0)
+  }
+
+  const flip = i % 2 === 1
+  return (
+    <div ref={ref} className="relative [perspective:1200px]" onPointerMove={onMove} onPointerLeave={reset}>
+      {/* moldura dourada deslocada, anda em velocidade diferente da foto */}
+      <motion.div
+        aria-hidden="true"
+        style={{ y: frameY }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.1, ease }}
+        className={`absolute inset-0 border border-gold ${flip ? '-translate-x-5 translate-y-5 md:-translate-x-7' : 'translate-x-5 translate-y-5 md:translate-x-7'}`}
+      />
+      <motion.div
+        style={{ rotateX, rotateY }}
+        initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+        whileInView={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+        viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+        transition={{ duration: 1.3, ease: [0.65, 0, 0.35, 1] }}
+        className="relative aspect-[7/10] overflow-hidden bg-[#141414] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.55)]"
+      >
+        <motion.img
+          src={p.src}
+          srcSet={p.srcSet}
+          sizes="(min-width: 1024px) 34vw, 90vw"
+          alt={p.alt}
+          loading="lazy"
+          style={{ y: imgY, scale: 1.14 }}
+          className="h-full w-full object-cover"
+        />
+        {/* cantos dourados */}
+        <span aria-hidden="true" className="absolute top-4 left-4 size-6 border-t border-l border-gold/80" />
+        <span aria-hidden="true" className="absolute right-4 bottom-4 size-6 border-r border-b border-gold/80" />
+      </motion.div>
+    </div>
+  )
 }
-const line = {
-  hide: { opacity: 0, x: -16 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.7, ease } },
+
+const text = {
+  hide: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } },
+}
+const item = {
+  hide: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease } },
 }
 
 /**
- * Cartões das sócias em formato compacto: foto emoldurada com fio dourado ao lado
- * do texto, para ler e ver ao mesmo tempo. A moldura se desenha, a foto abre como
- * cortina e os textos entram em sequência.
+ * Sócias em linhas alternadas: foto grande de um lado e texto do outro, para ver
+ * e ler ao mesmo tempo.
  */
 export function Partners() {
   return (
-    <div className="grid gap-12 lg:grid-cols-2 lg:gap-10">
-      {partners.map((p, i) => (
-        <motion.article
-          key={p.name}
-          initial="hide"
-          whileInView="show"
-          viewport={{ once: true, margin: '0px 0px -15% 0px' }}
-          variants={card}
-          className="group grid grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] items-center gap-6 sm:gap-8"
-        >
-          {/* foto com moldura fina */}
-          <div className="relative p-2">
-            <motion.span
-              aria-hidden="true"
-              variants={{ hide: { opacity: 0, scale: 0.92 }, show: { opacity: 1, scale: 1, transition: { duration: 0.9, ease, delay: i * 0.1 } } }}
-              className="absolute inset-0 border border-gold/60 transition-colors duration-500 group-hover:border-gold"
-            />
+    <div className="space-y-24 md:space-y-32">
+      {partners.map((p, i) => {
+        const flip = i % 2 === 1
+        return (
+          <article key={p.name} className="grid items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-24">
+            <div className={`mx-auto w-full max-w-md md:max-w-none ${flip ? 'md:order-2' : ''}`}>
+              <Portrait p={p} i={i} />
+            </div>
             <motion.div
-              variants={{
-                hide: { clipPath: 'inset(0% 0% 100% 0%)' },
-                show: { clipPath: 'inset(0% 0% 0% 0%)', transition: { duration: 1.2, ease: [0.65, 0, 0.35, 1], delay: 0.15 + i * 0.1 } },
-              }}
-              className="relative aspect-[7/10] overflow-hidden bg-[#141414]"
+              initial="hide"
+              whileInView="show"
+              viewport={{ once: true, margin: '0px 0px -15% 0px' }}
+              variants={text}
+              className={flip ? 'md:order-1 md:text-right' : ''}
             >
-              <img
-                src={p.src}
-                alt={p.alt}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.05]"
+              <motion.p variants={item} className="text-[0.7rem] font-semibold tracking-[0.22em] text-gold-deep uppercase">
+                Sócia fundadora · {p.role}
+              </motion.p>
+              <motion.h3 variants={item} className="heading mt-4 text-4xl text-graphite sm:text-5xl">
+                {p.name}
+              </motion.h3>
+              <motion.div
+                variants={{ hide: { scaleX: 0 }, show: { scaleX: 1, transition: { duration: 1, ease } } }}
+                className={`mt-6 h-px w-20 bg-gold ${flip ? 'origin-right md:ml-auto' : 'origin-left'}`}
               />
+              <motion.div variants={item} className={`mt-8 flex items-baseline gap-4 ${flip ? 'md:justify-end' : ''}`}>
+                <span className="font-serif text-5xl font-semibold text-gold-deep">{p.stat.value}</span>
+                <span className="max-w-[12rem] text-sm leading-snug text-graphite/70">{p.stat.label}</span>
+              </motion.div>
+              <ul className="mt-8 space-y-3">
+                {p.bio.map((b) => (
+                  <motion.li key={b} variants={item} className="leading-relaxed text-graphite/75 sm:text-lg">
+                    {b}
+                  </motion.li>
+                ))}
+              </ul>
             </motion.div>
-          </div>
-
-          {/* texto */}
-          <div>
-            <motion.p variants={line} className="text-[0.66rem] font-semibold tracking-[0.2em] text-gold-deep uppercase">
-              Sócia fundadora · {p.role}
-            </motion.p>
-            <motion.h3 variants={line} className="heading mt-3 text-2xl text-graphite sm:text-[1.9rem]">
-              {p.name}
-            </motion.h3>
-            <motion.div
-              variants={{ hide: { scaleX: 0 }, show: { scaleX: 1, transition: { duration: 0.9, ease } } }}
-              className="mt-4 h-px w-14 origin-left bg-gold"
-            />
-            <ul className="mt-4 space-y-2.5">
-              {p.bio.map((b) => (
-                <motion.li key={b} variants={line} className="text-[0.92rem] leading-relaxed text-graphite/70">
-                  {b}
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-        </motion.article>
-      ))}
+          </article>
+        )
+      })}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { animate, motion, useInView, useMotionValue, useTransform } from 'framer-motion'
 import { useEffect, useRef } from 'react'
-import { Chapter, ease } from './motion'
+import { Chapter, ease, SectionNumber } from './motion'
 
 /** Principais cases, conforme o site oficial da Valore. */
 const cases = [
@@ -71,8 +71,9 @@ function LogoRow() {
 
 export function CasesAndClients() {
   return (
-    <section className="on-dark bg-graphite-2 py-24 text-white md:py-32">
-      <div className="container-lp">
+    <section className="on-dark relative overflow-hidden bg-graphite-2 py-24 text-white md:py-32">
+      <SectionNumber n="05" dark />
+      <div className="relative container-lp">
         <Chapter n="05" label="Principais cases tributários" dark />
         <div className="mt-12 grid gap-px overflow-hidden bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
           {cases.map((c, i) => (
@@ -94,7 +95,7 @@ export function CasesAndClients() {
         </div>
       </div>
 
-      <div className="mt-24">
+      <div className="relative mt-24">
         <div className="container-lp">
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="kicker mb-10">
             Alguns dos nossos clientes
