@@ -130,7 +130,7 @@ export function MaskText({
   return (
     <MotionTag className={className} aria-label={text.replaceAll('*', '')} initial="hide" {...anim}>
       {words.map(({ w, gold }, i) => (
-        <span key={i} aria-hidden="true" className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+        <span key={i} aria-hidden="true" className="-mb-[0.16em] inline-block overflow-hidden pb-[0.22em] align-bottom">
           <motion.span
             className={`inline-block ${gold ? goldClass : ''}`}
             variants={{ hide: { y: '105%' }, show: { y: '0%' } }}

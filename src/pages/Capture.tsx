@@ -176,23 +176,59 @@ function Hero() {
   )
 }
 
+/** Faixa de credenciais: itens entram em sequência, números contam, o "V" gira e um fio dourado percorre a base. */
 function Credentials() {
+  const item = {
+    hide: { opacity: 0, y: 24 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease } },
+  }
+  const items = [
+    { mark: <CountUp to={18} suffix="+" className="font-serif text-5xl font-semibold text-gold-deep" />, text: 'anos de atuação em planejamento tributário' },
+    {
+      mark: (
+        <motion.img
+          src="/img/v-dourado.webp"
+          alt=""
+          aria-hidden="true"
+          variants={{ hide: { rotate: -120, scale: 0.4, opacity: 0 }, show: { rotate: 0, scale: 1, opacity: 1, transition: { type: 'spring', stiffness: 140, damping: 12, delay: 0.2 } } }}
+          className="h-10 w-auto"
+        />
+      ),
+      text: 'Grupo de Estudos sobre a Reforma Tributária da OAB/Maringá',
+    },
+    { mark: <CountUp to={7} className="font-serif text-5xl font-semibold text-gold-deep" />, text: 'segmentos analisados no guia' },
+  ]
   return (
-    <section className="border-b border-line bg-white">
-      <div className="container-lp grid divide-y divide-line md:grid-cols-3 md:divide-x md:divide-y-0">
-        <Reveal className="flex items-center gap-5 py-7 md:pr-8">
-          <CountUp to={18} suffix="+" className="font-serif text-5xl font-semibold text-gold-deep" />
-          <p className="text-sm leading-snug font-medium text-graphite/80">anos de atuação em planejamento tributário</p>
-        </Reveal>
-        <Reveal delay={0.1} className="flex items-center gap-5 py-7 md:px-8">
-          <img src="/img/v-dourado.webp" alt="" aria-hidden="true" className="h-9 w-auto" />
-          <p className="text-sm leading-snug font-medium text-graphite/80">Grupo de Estudos sobre a Reforma Tributária da OAB/Maringá</p>
-        </Reveal>
-        <Reveal delay={0.2} className="flex items-center gap-5 py-7 md:pl-8">
-          <CountUp to={7} className="font-serif text-5xl font-semibold text-gold-deep" />
-          <p className="text-sm leading-snug font-medium text-graphite/80">segmentos analisados no guia</p>
-        </Reveal>
-      </div>
+    <section className="relative border-b border-line bg-white">
+      <motion.div
+        initial="hide"
+        whileInView="show"
+        viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+        variants={{ hide: {}, show: { transition: { staggerChildren: 0.15 } } }}
+        className="container-lp grid divide-y divide-line md:grid-cols-3 md:divide-x md:divide-y-0"
+      >
+        {items.map((it, i) => (
+          <motion.div
+            key={i}
+            variants={item}
+            whileHover={{ y: -4 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className={`group relative flex items-center gap-5 py-7 ${i === 0 ? 'md:pr-8' : i === 1 ? 'md:px-8' : 'md:pl-8'}`}
+          >
+            {it.mark}
+            <p className="text-sm leading-snug font-medium text-graphite/80 transition-colors group-hover:text-graphite">{it.text}</p>
+          </motion.div>
+        ))}
+      </motion.div>
+      {/* fio dourado que percorre a base da faixa */}
+      <motion.div
+        aria-hidden="true"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.6, ease: [0.65, 0, 0.35, 1], delay: 0.4 }}
+        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gold"
+      />
     </section>
   )
 }

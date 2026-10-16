@@ -39,21 +39,26 @@ export function Gallery({ title }: { title: string }) {
       {/* desktop: rolagem horizontal presa */}
       <section ref={ref} className="relative hidden h-[240vh] bg-graphite-2 md:block">
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
-          <motion.p
-            style={{ x: titleX }}
-            className="pointer-events-none mb-10 font-serif text-[9vw] leading-none font-semibold whitespace-nowrap text-white/[0.07]"
-            aria-hidden="true"
-          >
-            {title} · {title}
-          </motion.p>
+          {/* letreiro: corre sozinho e ainda acompanha a rolagem */}
+          <motion.div style={{ x: titleX }} aria-hidden="true" className="pointer-events-none mb-10 overflow-visible">
+            <motion.p
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{ duration: 40, ease: 'linear', repeat: Infinity }}
+              className="w-max font-serif text-[9vw] leading-none font-semibold whitespace-nowrap text-white/[0.07]"
+            >
+              {title} · {title} · {title} · {title} ·&nbsp;
+            </motion.p>
+          </motion.div>
           <motion.div ref={rowRef} style={{ x }} className="flex w-max gap-8 px-[6vw]">
             {images.map((im, i) => (
               <figure
                 key={im.src}
-                className={`group relative shrink-0 overflow-hidden ${i % 2 ? 'mt-24 h-[46vh] w-[34vw]' : 'h-[56vh] w-[30vw]'}`}
+                className={`group relative shrink-0 border border-gold/50 p-2 transition-colors duration-500 hover:border-gold ${i % 2 ? 'mt-24 h-[46vh] w-[34vw]' : 'h-[56vh] w-[30vw]'}`}
               >
-                <img src={im.src} alt={im.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.06]" />
-                <div className="absolute inset-0 bg-graphite-2/10 transition-colors duration-700 group-hover:bg-transparent" />
+                <div className="relative h-full w-full overflow-hidden">
+                  <img src={im.src} alt={im.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.06]" />
+                  <div className="absolute inset-0 bg-graphite-2/10 transition-colors duration-700 group-hover:bg-transparent" />
+                </div>
               </figure>
             ))}
           </motion.div>
@@ -62,20 +67,28 @@ export function Gallery({ title }: { title: string }) {
 
       {/* celular: rolagem horizontal com encaixe */}
       <section className="overflow-hidden bg-graphite-2 py-16 md:hidden">
-        <p className="mb-8 px-5 font-serif text-3xl font-semibold text-white">{title}</p>
+        <div aria-hidden="true" className="mb-8 overflow-hidden">
+          <motion.p
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
+            className="w-max font-serif text-3xl font-semibold whitespace-nowrap text-white"
+          >
+            {title} · {title} · {title} · {title} ·&nbsp;
+          </motion.p>
+        </div>
+        <p className="sr-only">{title}</p>
         <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {images.map((im, i) => (
-            <motion.img
+            <motion.div
               key={im.src}
-              src={im.src}
-              alt={im.alt}
-              loading="lazy"
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: Math.min(i, 3) * 0.08 }}
-              className="h-80 w-[78vw] max-w-xs shrink-0 snap-center object-cover"
-            />
+              className="w-[78vw] max-w-xs shrink-0 snap-center border border-gold/50 p-1.5"
+            >
+              <img src={im.src} alt={im.alt} loading="lazy" className="h-80 w-full object-cover" />
+            </motion.div>
           ))}
         </div>
         <p className="mt-2 px-5 text-xs text-white/40">Deslize para ver mais →</p>
