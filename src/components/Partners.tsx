@@ -1,5 +1,4 @@
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
-import { useRef, type PointerEvent } from 'react'
+import { motion } from 'framer-motion'
 import { ease } from './motion'
 
 /** Fotos e textos conforme o site oficial da Valore (valoretribut.com). */
@@ -27,59 +26,33 @@ const partners = [
   },
 ]
 
-const spring = { stiffness: 150, damping: 18, mass: 0.6 }
-
-/** Foto grande com moldura deslocada, parallax interno e inclinação leve ao mouse. */
-function Portrait({ p, i }: { p: (typeof partners)[number]; i: number }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const imgY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%'])
-  const frameY = useTransform(scrollYProgress, [0, 1], [40, -40])
-
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-6, 6]), spring)
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [5, -5]), spring)
-  const onMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== 'mouse') return
-    const r = e.currentTarget.getBoundingClientRect()
-    mx.set((e.clientX - r.left) / r.width - 0.5)
-    my.set((e.clientY - r.top) / r.height - 0.5)
-  }
-  const reset = () => {
-    mx.set(0)
-    my.set(0)
-  }
-
-  const flip = i % 2 === 1
+/** Foto inteira (proporção original 7:10) com moldura dourada fixa e cantos dourados. */
+function Portrait({ p }: { p: (typeof partners)[number] }) {
   return (
-    <div ref={ref} className="relative [perspective:1200px]" onPointerMove={onMove} onPointerLeave={reset}>
-      {/* moldura dourada deslocada, anda em velocidade diferente da foto */}
+    <div className="relative">
+      {/* moldura dourada deslocada */}
       <motion.div
         aria-hidden="true"
-        style={{ y: frameY }}
-        initial={{ opacity: 0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, x: 0, y: 0 }}
+        whileInView={{ opacity: 1, x: 16, y: 16 }}
         viewport={{ once: true }}
-        transition={{ duration: 1.1, ease }}
-        className={`absolute inset-0 border border-gold ${flip ? '-translate-x-5 translate-y-5 md:-translate-x-7' : 'translate-x-5 translate-y-5 md:translate-x-7'}`}
+        transition={{ duration: 1.1, ease, delay: 0.5 }}
+        className="absolute inset-0 border border-gold"
       />
       <motion.div
-        style={{ rotateX, rotateY }}
         initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
         whileInView={{ clipPath: 'inset(0% 0% 0% 0%)' }}
         viewport={{ once: true, margin: '0px 0px -10% 0px' }}
         transition={{ duration: 1.3, ease: [0.65, 0, 0.35, 1] }}
-        className="relative aspect-[7/10] overflow-hidden bg-[#141414] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.55)]"
+        className="group relative aspect-[7/10] overflow-hidden bg-[#141414] shadow-[0_30px_60px_-30px_rgb(0_0_0/0.5)]"
       >
-        <motion.img
+        <img
           src={p.src}
           srcSet={p.srcSet}
-          sizes="(min-width: 1024px) 34vw, 90vw"
+          sizes="(min-width: 768px) 24rem, 90vw"
           alt={p.alt}
           loading="lazy"
-          style={{ y: imgY, scale: 1.14 }}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.03]"
         />
         {/* cantos dourados */}
         <span aria-hidden="true" className="absolute top-4 left-4 size-6 border-t border-l border-gold/80" />
@@ -105,19 +78,17 @@ const item = {
 export function Partners() {
   return (
     <div className="space-y-24 md:space-y-32">
-      {partners.map((p, i) => {
-        const flip = i % 2 === 1
+      {partners.map((p) => {
         return (
-          <article key={p.name} className="grid items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-24">
-            <div className={`mx-auto w-full max-w-md md:max-w-none ${flip ? 'md:order-2' : ''}`}>
-              <Portrait p={p} i={i} />
+          <article key={p.name} className="grid items-center gap-12 md:grid-cols-2 md:gap-16 lg:gap-20">
+            <div className="mx-auto w-full max-w-[19rem] sm:max-w-sm md:mx-0 md:ml-auto">
+              <Portrait p={p} />
             </div>
             <motion.div
               initial="hide"
               whileInView="show"
               viewport={{ once: true, margin: '0px 0px -15% 0px' }}
               variants={text}
-              className={flip ? 'md:order-1 md:text-right' : ''}
             >
               <motion.p variants={item} className="text-[0.7rem] font-semibold tracking-[0.22em] text-gold-deep uppercase">
                 Sócia fundadora · {p.role}
@@ -127,9 +98,9 @@ export function Partners() {
               </motion.h3>
               <motion.div
                 variants={{ hide: { scaleX: 0 }, show: { scaleX: 1, transition: { duration: 1, ease } } }}
-                className={`mt-6 h-px w-20 bg-gold ${flip ? 'origin-right md:ml-auto' : 'origin-left'}`}
+                className="mt-6 h-px w-20 origin-left bg-gold"
               />
-              <motion.div variants={item} className={`mt-8 flex items-baseline gap-4 ${flip ? 'md:justify-end' : ''}`}>
+              <motion.div variants={item} className="mt-8 flex items-baseline gap-4">
                 <span className="font-serif text-5xl font-semibold text-gold-deep">{p.stat.value}</span>
                 <span className="max-w-[12rem] text-sm leading-snug text-graphite/70">{p.stat.label}</span>
               </motion.div>
