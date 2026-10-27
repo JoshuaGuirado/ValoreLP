@@ -24,7 +24,7 @@ export const config = {
   },
 
   /** WhatsApp que recebe os contatos dos botões (somente dígitos, com DDI 55). */
-  whatsapp: env.VITE_WHATSAPP ?? '5544999665711',
+  whatsapp: env.VITE_WHATSAPP || '554498441083',
 
   /**
    * Endpoint que recebe os leads (Google Apps Script publicado como app da Web,

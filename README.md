@@ -25,7 +25,7 @@ Copie `.env.example` para `.env` e preencha:
 
 | Variável | Para que serve |
 | --- | --- |
-| `VITE_WHATSAPP` | Número dos botões de WhatsApp (somente dígitos, com 55 e DDD). Padrão: `5544999665711` |
+| `VITE_WHATSAPP` | Número dos botões de WhatsApp (somente dígitos, com 55 e DDD). Padrão: `554498441083` |
 | `VITE_LEAD_ENDPOINT` | URL do Google Apps Script que grava os leads na planilha e envia o guia por e-mail |
 | `VITE_GUIDE_URL` | Link do PDF do guia no botão "Baixar o guia agora". Padrão: `/guia-reforma-tributaria-valore.pdf`, que já está em `public/` |
 | `VITE_CNPJ` / `VITE_EMAIL_PRIVACIDADE` | Dados exibidos na Política de Privacidade |
