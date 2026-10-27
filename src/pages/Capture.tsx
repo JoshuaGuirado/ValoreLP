@@ -434,7 +434,7 @@ export default function CapturePage() {
               <p className="kicker justify-center">Guia executivo gratuito</p>
             </Reveal>
             <MaskText
-              text="Reforma tributária: as seis decisões que a sua empresa precisa tomar *agora*"
+              text="Reforma tributária: tudo o que você precisa saber para sua empresa em *2027*"
               className="heading mx-auto mt-6 max-w-3xl text-3xl sm:text-5xl"
             />
             <Reveal delay={0.3} className="mt-10">
