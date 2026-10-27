@@ -20,10 +20,13 @@ const CONFIG = {
   SENDER_EMAIL: 'katrin@valoretribut.com',
   /** Para onde vão as respostas do lead (vazio = o próprio remetente). */
   REPLY_TO: 'katrin@valoretribut.com',
-  /** ID do PDF do guia no Google Drive, para ir anexado ao e-mail (veja o README). */
-  GUIDE_FILE_ID: 'COLE_AQUI_O_ID_DO_PDF_NO_DRIVE',
-  /** Link público do PDF, usado no botão "Baixar o guia" (ex.: https://seudominio.com.br/guia-reforma-tributaria-valore.pdf). */
-  GUIDE_URL: 'COLE_AQUI_O_LINK_DO_GUIA',
+  /**
+   * Endereço do site na Vercel + /guia-reforma-tributaria-valore.pdf
+   * O PDF é baixado daqui e vai anexado ao e-mail.
+   */
+  GUIDE_URL: 'COLE_AQUI_O_LINK_DO_SITE/guia-reforma-tributaria-valore.pdf',
+  /** Opcional: ID de uma cópia do PDF no Google Drive. Se preenchido, é usada no lugar do link acima. */
+  GUIDE_FILE_ID: '',
   /** Quem recebe o aviso de novo lead (separe vários por vírgula). Deixe vazio para não avisar. */
   NOTIFY_TO: '',
   /** WhatsApp da Valore exibido no e-mail (somente dígitos). */
@@ -119,8 +122,14 @@ function sendGuideEmail_(d) {
 
 /** PDF do guia anexado (vazio se GUIDE_FILE_ID não estiver configurado). */
 function guideAttachment_() {
-  if (!CONFIG.GUIDE_FILE_ID || CONFIG.GUIDE_FILE_ID.indexOf('COLE_AQUI') === 0) return []
-  const blob = DriveApp.getFileById(CONFIG.GUIDE_FILE_ID).getBlob()
+  let blob
+  if (CONFIG.GUIDE_FILE_ID) {
+    blob = DriveApp.getFileById(CONFIG.GUIDE_FILE_ID).getBlob()
+  } else if (/^https?:\/\//.test(CONFIG.GUIDE_URL)) {
+    blob = UrlFetchApp.fetch(CONFIG.GUIDE_URL).getBlob()
+  } else {
+    return []
+  }
   blob.setName('Guia Reforma Tributária - Valore.pdf')
   return [blob]
 }

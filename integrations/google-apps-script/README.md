@@ -10,8 +10,7 @@ Cada envio do formulário vira uma linha em uma planilha do Google (visível par
 2. Na planilha, abra **Extensões → Apps Script**.
 3. Apague o conteúdo do arquivo `Código.gs` e cole todo o conteúdo de [`Code.gs`](./Code.gs).
 4. No topo do script, preencha o bloco `CONFIG`:
-   - `GUIDE_FILE_ID`: envie o PDF do guia (`public/guia-reforma-tributaria-valore.pdf`) para o Google Drive e copie o ID do link (o trecho entre `/d/` e `/view`). É ele que vai anexado ao e-mail.
-   - `GUIDE_URL`: link público do PDF, usado no botão "Baixar o guia". Pode ser o endereço do site depois de publicado (`https://seudominio.com.br/guia-reforma-tributaria-valore.pdf`) ou o link do Drive com **Compartilhar → Qualquer pessoa com o link**.
+   - `GUIDE_URL`: endereço do site na Vercel + `/guia-reforma-tributaria-valore.pdf`. O PDF é baixado desse link e vai anexado ao e-mail.
    - `SENDER_EMAIL` e `REPLY_TO`: veja "Trocar o e-mail remetente" abaixo.
    - `NOTIFY_TO`: e-mails da equipe que devem ser avisados a cada novo lead.
    - `WHATSAPP`: número da Valore (somente dígitos, com 55 e DDD).
