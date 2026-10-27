@@ -30,7 +30,7 @@ const CONFIG = {
   /** Quem recebe o aviso de novo lead (separe vários por vírgula). Deixe vazio para não avisar. */
   NOTIFY_TO: '',
   /** WhatsApp da Valore exibido no e-mail (somente dígitos). */
-  WHATSAPP: '554498441083',
+  WHATSAPP: '5544998441083',
   SENDER_NAME: 'Valore Soluções Tributárias',
 }
 
