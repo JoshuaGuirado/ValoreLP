@@ -3,7 +3,7 @@
  *
  * O que este script faz a cada envio do formulário:
  *  1. grava o lead na aba "Leads" da planilha (cria a aba e o cabeçalho se não existirem);
- *  2. envia ao lead um e-mail com o link do guia;
+ *  2. envia ao lead um e-mail com o guia em PDF anexado (e um botão para baixar);
  *  3. avisa a equipe da Valore por e-mail.
  *
  * Instalação: ver README.md nesta pasta.
@@ -12,7 +12,17 @@
 // ===== CONFIGURAÇÃO =====
 const CONFIG = {
   SHEET_NAME: 'Leads',
-  /** Link público do PDF do guia (ex.: link de compartilhamento do Google Drive). */
+  /**
+   * E-mail que aparece como remetente. Deixe vazio para usar a própria conta Google
+   * que publicou o script. Se preencher com outro endereço, ele precisa estar
+   * cadastrado nessa conta em Gmail → Configurações → Contas → "Enviar e-mail como".
+   */
+  SENDER_EMAIL: 'katrin@valoretribut.com',
+  /** Para onde vão as respostas do lead (vazio = o próprio remetente). */
+  REPLY_TO: 'katrin@valoretribut.com',
+  /** ID do PDF do guia no Google Drive, para ir anexado ao e-mail (veja o README). */
+  GUIDE_FILE_ID: 'COLE_AQUI_O_ID_DO_PDF_NO_DRIVE',
+  /** Link público do PDF, usado no botão "Baixar o guia" (ex.: https://seudominio.com.br/guia-reforma-tributaria-valore.pdf). */
   GUIDE_URL: 'COLE_AQUI_O_LINK_DO_GUIA',
   /** Quem recebe o aviso de novo lead (separe vários por vírgula). Deixe vazio para não avisar. */
   NOTIFY_TO: '',
@@ -99,17 +109,42 @@ function sendGuideEmail_(d) {
     'Você recebeu este e-mail porque solicitou o material em nosso site. Para não receber mais comunicações, responda a este e-mail com "descadastrar".</p>' +
     '</td></tr></table></div>'
 
-  MailApp.sendEmail({
-    to: d.email,
-    subject: 'O seu guia da reforma tributária está liberado',
+  const options = {
     htmlBody: html,
     name: CONFIG.SENDER_NAME,
-  })
+    attachments: guideAttachment_(),
+  }
+  sendMail_(d.email, 'O seu guia da reforma tributária está liberado', options)
+}
+
+/** PDF do guia anexado (vazio se GUIDE_FILE_ID não estiver configurado). */
+function guideAttachment_() {
+  if (!CONFIG.GUIDE_FILE_ID || CONFIG.GUIDE_FILE_ID.indexOf('COLE_AQUI') === 0) return []
+  const blob = DriveApp.getFileById(CONFIG.GUIDE_FILE_ID).getBlob()
+  blob.setName('Guia Reforma Tributária - Valore.pdf')
+  return [blob]
+}
+
+/**
+ * Envia pelo Gmail. Com SENDER_EMAIL preenchido, usa esse endereço como remetente
+ * (precisa ser um "Enviar e-mail como" da conta que publicou o script).
+ */
+function sendMail_(to, subject, options) {
+  const opts = Object.assign({}, options)
+  if (CONFIG.REPLY_TO) opts.replyTo = CONFIG.REPLY_TO
+  const own = Session.getEffectiveUser().getEmail()
+  if (CONFIG.SENDER_EMAIL && CONFIG.SENDER_EMAIL.toLowerCase() !== String(own).toLowerCase()) {
+    const aliases = GmailApp.getAliases().map(function (a) { return a.toLowerCase() })
+    if (aliases.indexOf(CONFIG.SENDER_EMAIL.toLowerCase()) === -1) {
+      throw new Error('O endereço ' + CONFIG.SENDER_EMAIL + ' não está em "Enviar e-mail como" desta conta Google.')
+    }
+    opts.from = CONFIG.SENDER_EMAIL
+  }
+  GmailApp.sendEmail(to, subject, 'Abra este e-mail em um leitor compatível com HTML.', opts)
 }
 
 function notifyTeam_(d) {
-  MailApp.sendEmail({
-    to: CONFIG.NOTIFY_TO,
+  sendMail_(CONFIG.NOTIFY_TO, 'Novo lead: ' + d.nome + ' — ' + d.empresa + ' (' + d.regime + ')', {
     subject: 'Novo lead: ' + d.nome + ' — ' + d.empresa + ' (' + d.regime + ')',
     htmlBody:
       '<p><strong>Nome:</strong> ' + esc_(d.nome) + '<br><strong>Empresa:</strong> ' + esc_(d.empresa) +

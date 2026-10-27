@@ -33,8 +33,8 @@ export const config = {
    */
   leadEndpoint: env.VITE_LEAD_ENDPOINT ?? '',
 
-  /** Link público do PDF do guia. Vazio = botão de download oculto. */
-  guideUrl: env.VITE_GUIDE_URL ?? '',
+  /** Link do PDF do guia (arquivo em public/). Pode ser trocado por VITE_GUIDE_URL. */
+  guideUrl: env.VITE_GUIDE_URL || '/guia-reforma-tributaria-valore.pdf',
 } as const
 
 export const consentText =

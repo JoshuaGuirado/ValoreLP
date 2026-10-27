@@ -69,12 +69,6 @@
     text-transform: uppercase;
     color: var(--color-gold-deep);
   }
-  .kicker::before {
-    content: '';
-    width: 1.75rem;
-    height: 1px;
-    background: currentColor;
-  }
   .on-dark .kicker {
     color: var(--color-gold);
   }

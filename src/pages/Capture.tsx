@@ -144,7 +144,7 @@ function Hero() {
             as="h1"
             immediate
             delay={0.35}
-            text="Reforma tributária: as *seis decisões* que a sua empresa precisa tomar agora"
+            text="Reforma tributária: tudo o que você precisa saber para sua empresa em *2027*"
             className="heading mt-7 text-[2.3rem] sm:text-5xl lg:text-[3.5rem]"
           />
           <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.2, ease, delay: 1 }} className="mt-9 h-px w-24 origin-left bg-gold" />
