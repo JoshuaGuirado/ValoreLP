@@ -75,7 +75,7 @@ export function CasesAndClients() {
       <SectionNumber n="05" dark />
       <div className="relative container-lp">
         <Chapter n="05" label="Principais cases tributários" dark />
-        <div className="mt-12 grid gap-px overflow-hidden bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-px overflow-hidden bg-white/10 sm:grid-cols-2 xl:grid-cols-4">
           {cases.map((c, i) => (
             <motion.div
               key={c.text}
@@ -85,7 +85,7 @@ export function CasesAndClients() {
               transition={{ duration: 0.9, ease, delay: i * 0.12 }}
               className="bg-graphite-2 p-7 md:p-8"
             >
-              <p className="font-serif text-5xl font-semibold tabular-nums md:text-[3.4rem]">
+              <p className="font-serif text-[2.6rem] leading-none font-semibold tabular-nums sm:text-5xl xl:text-[3.2rem]">
                 <Money value={c.value} unit={c.unit} />
               </p>
               <p className="mt-2 text-[0.7rem] font-semibold tracking-[0.18em] text-gold uppercase">{c.label}</p>

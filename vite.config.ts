@@ -10,9 +10,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        captura: resolve(__dirname, 'index.html'),
-        obrigado: resolve(__dirname, 'obrigado/index.html'),
-        privacidade: resolve(__dirname, 'politica-de-privacidade/index.html'),
+        captura: resolve(import.meta.dirname, 'index.html'),
+        obrigado: resolve(import.meta.dirname, 'obrigado/index.html'),
+        privacidade: resolve(import.meta.dirname, 'politica-de-privacidade/index.html'),
       },
     },
   },

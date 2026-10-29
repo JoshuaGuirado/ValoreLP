@@ -32,6 +32,13 @@ Copie `.env.example` para `.env` e preencha:
 
 Depois de alterar o `.env`, rode `npm run build` de novo.
 
+## SEO
+
+- As três páginas são **pré-renderizadas** no build (`src/prerender.tsx` + `scripts/prerender.mjs`): o HTML já sai com todo o texto, e o React assume a página no navegador.
+- `public/robots.txt` e `public/sitemap.xml` apontam para `https://guia.valoretribut.com`.
+- A página principal tem título, descrição, Open Graph, Twitter Card e dados estruturados (Schema.org: empresa, endereço, telefone, sócias e o guia).
+- A página de obrigado fica fora do Google (`noindex`).
+
 ## Para onde vão os leads
 
 Os dados do formulário vão para uma **planilha do Google**, e o lead recebe o guia por **e-mail** automaticamente. O passo a passo (cerca de 10 minutos) está em [`integrations/google-apps-script/README.md`](integrations/google-apps-script/README.md).
