@@ -76,6 +76,11 @@ export async function submitLead(v: LeadInput) {
     console.warn('[Valore] VITE_LEAD_ENDPOINT não configurado. Lead não enviado:', payload)
   }
 
+  // Evento para o Google Tag Manager (conversão de lead), sem dados pessoais.
+  const w = window as unknown as { dataLayer?: Record<string, unknown>[] }
+  w.dataLayer = w.dataLayer || []
+  w.dataLayer.push({ event: 'generate_lead', form_name: 'guia_reforma_tributaria', regime_tributario: payload.regime })
+
   try {
     sessionStorage.setItem(
       STORAGE_KEY,
