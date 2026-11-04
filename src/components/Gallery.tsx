@@ -2,13 +2,14 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { useLayoutEffect, useRef, useState } from 'react'
 
 const images = [
-  { src: '/img/kit-presente.webp', alt: 'Kit Valore em preto e dourado' },
-  { src: '/img/aperto-de-maos.webp', alt: 'Aperto de mãos sobre a mesa de reunião' },
-  { src: '/img/xicaras.webp', alt: 'Xícaras e cartão de visita Valore' },
-  { src: '/img/contrato.webp', alt: 'Assinatura de contrato com balança da justiça ao fundo' },
-  { src: '/img/papelaria.webp', alt: 'Papelaria Valore' },
-  { src: '/img/canecas.webp', alt: 'Canecas Valore em dourado e grafite' },
-  { src: '/img/livros.webp', alt: 'Livros de Direito' },
+  { src: '/img/escritorio-sala-1280.webp', alt: 'Sala de reunião do escritório da Valore' },
+  { src: '/img/escritorio-recepcao-800.webp', alt: 'Recepção do escritório da Valore' },
+  { src: '/img/virginia-aula.webp', alt: 'Virgínia Dalla Flora em aula sobre tributação' },
+  { src: '/img/katrin-trabalhando-1280.webp', alt: 'Katrin Arrais trabalhando no escritório' },
+  { src: '/img/virginia-palestra.webp', alt: 'Virgínia Dalla Flora em palestra sobre os impactos da reforma tributária' },
+  { src: '/img/escritorio-sala-2-800.webp', alt: 'Mesa de reunião do escritório da Valore' },
+  { src: '/img/katrin-trabalhando-2-1280.webp', alt: 'Katrin Arrais na mesa de trabalho' },
+  { src: '/img/escritorio-mesa-800.webp', alt: 'Sala de reunião com mesa em madeira' },
 ]
 
 /**

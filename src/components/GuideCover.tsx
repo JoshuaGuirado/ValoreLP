@@ -1,11 +1,10 @@
 import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { useRef, type PointerEvent } from 'react'
-import { Logo } from './Logo'
 
 const spring = { stiffness: 160, damping: 18, mass: 0.6 }
 
 /**
- * Capa do guia em papel, com sombra real e leve deslocamento ao rolar.
+ * Capa real do guia (página 1 do PDF), em papel, com sombra e leve deslocamento ao rolar.
  * No desktop, inclina em 3D seguindo o mouse, com um reflexo de luz sobre a capa.
  */
 export function GuideCover({ className = '' }: { className?: string }) {
@@ -49,20 +48,13 @@ export function GuideCover({ className = '' }: { className?: string }) {
         <div aria-hidden="true" className="absolute inset-0 translate-x-2.5 translate-y-2.5 bg-[#e9e5dc] shadow-sm" />
         <div aria-hidden="true" className="absolute inset-0 translate-x-1.5 translate-y-1.5 bg-[#f1eee8]" />
 
-        <div className="relative aspect-[210/297] overflow-hidden bg-graphite shadow-[0_40px_60px_-30px_rgb(44_43_41/0.55)]">
-          <img src="/img/sala-reuniao.webp" alt="" className="absolute inset-0 h-full w-full object-cover opacity-45" />
-          <div className="absolute inset-0 bg-gradient-to-b from-graphite/30 via-graphite/60 to-graphite" />
-          <div className="relative flex h-full flex-col p-[10%] text-white">
-            <Logo className="w-[58%]" subtitleColor="#b4b5b1" />
-            <div className="mt-auto">
-              <div className="mb-5 h-px w-14 bg-gold" />
-              <p className="font-serif text-[1.65rem] leading-[1.1] font-semibold">Reforma Tributária</p>
-              <p className="mt-3 text-[0.78rem] leading-relaxed text-white/80">
-                Os principais insights de planejamento tributário para empresas
-              </p>
-              <p className="mt-6 text-[0.58rem] font-semibold tracking-[0.24em] text-gold uppercase">Guia executivo</p>
-            </div>
-          </div>
+        <div className="relative aspect-[800/1250] overflow-hidden bg-[#cfcfcf] shadow-[0_40px_60px_-30px_rgb(44_43_41/0.55)]">
+          <img
+            src="/img/guia-capa.webp"
+            alt="Capa do guia Reforma Tributária: os principais insights de planejamento tributário para empresas"
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
           <motion.div aria-hidden="true" style={{ background: glare, opacity: glareOpacity }} className="pointer-events-none absolute inset-0" />
         </div>
       </motion.div>

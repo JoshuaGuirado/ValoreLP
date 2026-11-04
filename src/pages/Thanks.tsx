@@ -38,7 +38,8 @@ export default function ThanksPage() {
         {/* GUIA LIBERADO */}
         <section className="on-dark relative isolate overflow-hidden bg-graphite-2 pt-36 pb-24 text-white md:pt-44 md:pb-32">
           <motion.img
-            src="/img/sala-reuniao.webp"
+            src="/img/escritorio-sala-2400.webp"
+            srcSet="/img/escritorio-sala-1280.webp 1280w, /img/escritorio-sala-2400.webp 2400w" sizes="100vw"
             alt=""
             aria-hidden="true"
             initial={{ scale: 1.1, opacity: 0 }}
@@ -81,7 +82,7 @@ export default function ThanksPage() {
         {/* PERGUNTA */}
         <section className="bg-white py-24 md:py-32">
           <div className="container-lp grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
-            <RevealImage src="/img/aperto-de-maos.webp" alt="Aperto de mãos sobre a mesa de reunião" className="aspect-[4/3]" imgClassName="object-cover" parallax={6} />
+            <RevealImage src="/img/katrin-trabalhando-2-1280.webp" alt="Katrin Arrais trabalhando no escritório da Valore" className="aspect-[4/3]" imgClassName="object-cover" parallax={6} />
             <div>
               <Reveal>
                 <p className="kicker">Agora, a pergunta mais importante</p>

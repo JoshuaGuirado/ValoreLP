@@ -115,13 +115,15 @@ function Hero() {
     <section ref={ref} className="on-dark relative isolate overflow-hidden bg-graphite-2 pt-32 pb-20 text-white md:pt-40 lg:min-h-screen lg:pb-28">
       <motion.div style={{ y }} className="absolute inset-0 -z-10">
         <motion.img
-          src="/img/sala-reuniao.webp"
+          src="/img/escritorio-sala-2400.webp"
+          srcSet="/img/escritorio-sala-1280.webp 1280w, /img/escritorio-sala-2400.webp 2400w" sizes="100vw"
+          fetchPriority="high"
           alt=""
           aria-hidden="true"
           initial={{ scale: 1.25 }}
           animate={{ scale: 1.05 }}
           transition={{ duration: 3, ease: [0.22, 1, 0.36, 1] }}
-          className="h-[120%] w-full object-cover object-[50%_62%] blur-[1.5px]"
+          className="h-[120%] w-full object-cover object-[50%_55%]"
         />
       </motion.div>
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(44_43_41/0.93)_0%,rgb(44_43_41/0.8)_50%,rgb(44_43_41/0.45)_100%)]" />
@@ -248,7 +250,7 @@ export default function CapturePage() {
           <SectionNumber n="01" />
           <div className="relative container-lp grid items-center gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
             <div className="relative">
-              <RevealImage src="/img/xicaras.webp" alt="Xícaras e cartão de visita da Valore" className="aspect-[4/5] w-[85%]" imgClassName="object-cover" parallax={6} />
+              <RevealImage src="/img/escritorio-recepcao-1400.webp" alt="Recepção do escritório da Valore, em Maringá" className="aspect-[4/5] w-[85%]" imgClassName="object-cover" parallax={6} />
               <div className="absolute top-1/2 right-0 w-[55%] -translate-y-1/2">
                 <GuideCover />
               </div>
@@ -284,7 +286,7 @@ export default function CapturePage() {
         {/* O QUE MUDA E QUANDO → PRAZOS: o bloco 03 sobe por cima do 02 */}
         <CoverTransition
           under={
-        <PhotoSection src="/img/predios.webp" className="py-24 md:py-36" overlay="bg-graphite-2/85" soften>
+        <PhotoSection src="/img/escritorio-mesa-1400.webp" className="py-24 md:py-36" overlay="bg-graphite-2/85" soften>
           <SectionNumber n="02" dark />
           <div className="relative container-lp">
             <Chapter n="02" label="Cronograma da transição" dark />
@@ -339,7 +341,7 @@ export default function CapturePage() {
           <SectionNumber n="03" />
           <div className="relative container-lp grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
             <div className="relative">
-              <RevealImage src="/img/contrato.webp" alt="Assinatura de contrato com balança da justiça e martelo" className="aspect-[4/5] lg:aspect-[3/4]" imgClassName="object-cover" parallax={8} />
+              <RevealImage src="/img/katrin-trabalhando-2400.webp" alt="Katrin Arrais trabalhando no escritório da Valore" className="aspect-[4/5] lg:aspect-[3/4]" imgClassName="object-cover" parallax={8} />
               <div className="on-dark absolute inset-x-3 bottom-3 bg-graphite-2/90 p-4 backdrop-blur-sm sm:inset-x-6 sm:bottom-6 sm:p-6">
                 <Countdown dark />
               </div>
@@ -383,7 +385,7 @@ export default function CapturePage() {
         />
 
         {/* FAIXA MANIFESTO — frase que acende ao rolar */}
-        <Manifesto src="/img/martelo.webp" text="Porque mais do que números, geramos *valor* para o seu negócio." />
+        <Manifesto src="/img/escritorio-sala-2-1400.webp" text="Porque mais do que números, geramos *valor* para o seu negócio." />
 
         {/* SOBRE A VALORE */}
         <section className="relative overflow-hidden pt-16 pb-24 md:pt-20 md:pb-32">
@@ -391,9 +393,9 @@ export default function CapturePage() {
           <Divider className="relative mb-16 md:mb-20" />
           <div className="relative container-lp grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
             <div className="relative pb-20 sm:pb-28">
-              <RevealImage src="/img/kit-presente.webp" alt="Kit Valore em preto e dourado, com canecas e garrafa" className="aspect-[4/3] w-[86%]" imgClassName="object-cover" parallax={6} />
+              <RevealImage src="/img/katrin-trabalhando-2-2400.webp" alt="Katrin Arrais na mesa de trabalho, com o notebook da Valore" className="aspect-[4/3] w-[86%]" imgClassName="object-cover" parallax={6} />
               <div className="absolute right-0 bottom-0 w-[50%] bg-paper p-1.5">
-                <RevealImage src="/img/papelaria.webp" alt="Papelaria Valore" className="aspect-[4/3]" imgClassName="object-cover" delay={0.3} />
+                <RevealImage src="/img/escritorio-sala-1280.webp" alt="Sala de reunião do escritório da Valore" className="aspect-[4/3]" imgClassName="object-cover" delay={0.3} />
               </div>
             </div>
             <div>
@@ -418,7 +420,7 @@ export default function CapturePage() {
         </section>
 
         {/* CTA FINAL */}
-        <PhotoSection src="/img/kit-presente.webp" id="cta-final" className="py-28 md:py-36" overlay="bg-graphite-2/70">
+        <PhotoSection src="/img/escritorio-recepcao-1400.webp" id="cta-final" className="py-28 md:py-36" overlay="bg-graphite-2/80">
           <motion.img
             src="/img/v-dourado.webp"
             alt=""
